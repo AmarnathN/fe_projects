@@ -1,9 +1,12 @@
 import express from "express";
 import mongoose from "mongoose";
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 mongoose
   .connect(
-    "mongodb+srv://vayuteja:vayuteja@rela-estate.hcmjkgs.mongodb.net/real-estate?retryWrites=true&w=majority"
+    process.env.MONGODB_URL
   )
   .then(() => {
     console.log("DB connected");
