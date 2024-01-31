@@ -32,10 +32,13 @@ export const signIn = async (req, res, next) => {
     const validUser = await User.findOne({ username });
     if (!validUser) {
       next(errorHandler(404, "User not found"));
+      return;
     }
-    const validPassword = bcryptjs.compareSync(password, validUser.password);
+    const validPassword = bcryptjs.compareSync(password, validUser._doc.password);
+    console.log(!validPassword);
     if (!validPassword) {
-      next(errorHandler(401, "Invalid credentials!! Unable to Login"));
+      next(errorHandler("401", "Invalid credentials!! Unable to Login"));
+      return;
     }
     const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET, {
       expiresIn: 3600,
