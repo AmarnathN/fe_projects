@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
+import { useDispatch, useSelector } from "react-redux";
+import { signInFailure, signInStart, signInSuccess } from "../redux/user/userSlice.js";
+
 export default function Signin() {
   const [formData, setFormData] = useState({});
-  const [error, setError] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { error, isSubmitting} = useSelector((state) => state.user);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     setFormData({
@@ -17,18 +20,15 @@ export default function Signin() {
   const handleSubmit = async (e) => {
     e.preventDefault(); // prevent refreshing the page
     console.log(formData);
-    setIsSubmitting(true);
-    setError("");
+    dispatch(signInStart());
 
     try {
       if (formData.username.length < 1) {
-        setError("Username is required");
-        setIsSubmitting(false);
+        dispatch(signInFailure("Username is required"));
         return;
       }
       if (formData.password.length < 1) {
-        setError("Password is required");
-        setIsSubmitting(false);
+        dispatch(signInFailure("Password is required"));
         return;
       }
 
@@ -42,17 +42,14 @@ export default function Signin() {
       const data = await res.json();
 
       if (data.success === false) {
-        setError(data.message);
-        setIsSubmitting(false);
+        dispatch(signInFailure(data.message));
         return;
       }
-      setError("");
-      setIsSubmitting(false);
+      dispatch(signInSuccess(data.message));
       navigate("/");
       console.log(data);
     } catch (err) {
-      setError(err.message);
-      setIsSubmitting(false);
+      dispatch(signInSuccess(err.message));
       return;
     }
   };
@@ -88,7 +85,7 @@ export default function Signin() {
           <span className="text-blue-500"> Sign Up </span>
         </Link>
       </div>
-      {error.length > 1 && <p className="text-red-500">{error}</p>}
+      {(error === null || error.length > 1 )&& <p className="text-red-500">{error}</p>}
     </div>
   );
 }
