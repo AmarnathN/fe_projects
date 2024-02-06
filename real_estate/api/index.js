@@ -2,6 +2,8 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import authRouter from "./routes/auth.routes.js";
+import cookieParser from "cookie-parser";
+import userRouter from "./routes/user.route.js";
 
 dotenv.config();
 
@@ -17,12 +19,15 @@ mongoose
 const app = express();
 
 app.use(express.json()) // by default json is not allowed to be send in request unless specified here
+app.use(cookieParser());
+
 
 app.listen(3000, () => {
   console.log("Api running on 3000 ! ");
 });
 
 app.use("/api/auth", authRouter);
+app.use("/api/user", userRouter);
 
 /* !!! the order of middleware matters */
 
