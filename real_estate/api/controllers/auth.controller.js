@@ -61,8 +61,8 @@ export const signInGoogle = async (req, res, next) => {
   try {
     console.log(req.body);
     const { username, email } = req.body;
-    const user = await User.findOne({ email });
-    if (user) {
+    const validUser = await User.findOne({ email });
+    if (validUser) {
       const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET, {
         expiresIn: 3600,
       });
