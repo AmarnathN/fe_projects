@@ -105,3 +105,11 @@ export const signInGoogle = async (req, res, next) => {
     next(error);
   }
 };
+
+
+export const signout = async (req, res, next) =>{
+  if(req.params.id !== req.user.id){
+    return next(errorHandler(401, "Unauthorized! you can only signout your account"));
+  }
+  res.clearCookie("access_token").status(200).json("User has been signed out");
+} 

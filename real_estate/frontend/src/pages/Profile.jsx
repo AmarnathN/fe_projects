@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import { useSelector , useDispatch} from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import {
   getDownloadURL,
   getStorage,
@@ -9,14 +9,23 @@ import {
 import { app } from "../firebase";
 import moment from "moment";
 
-import { 
+import {
   updateUserAtStart,
   updateUserSuccess,
-  updateUserFailure, } from "../redux/user/userSlice.js";
+  updateUserFailure,
+  deleteUserAtStart,
+  deleteUserFailure,
+  deleteUserSuccess,
+  signOutAtStart,
+  signOutSuccess,
+  signOutFailure,
+} from "../redux/user/userSlice.js";
 
 export default function Profile() {
   const fileRef = useRef(null);
-  const {currentUser, error, isSubmitting} = useSelector((state) => state.user);
+  const { currentUser, error, isSubmitting } = useSelector(
+    (state) => state.user
+  );
   const dispatch = useDispatch();
 
   const [file, setFile] = useState(null);
@@ -82,9 +91,56 @@ export default function Profile() {
       }
       dispatch(updateUserSuccess(data));
       setUpdateSuccess(true);
-      return
+      return;
     } catch (error) {
       dispatch(updateUserFailure(error));
+      return;
+    }
+  };
+
+  const handleDeleteUser = async (e) => {
+    e.preventDefault();
+    dispatch(deleteUserAtStart());
+    try {
+      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(deleteUserFailure(data.message));
+        return;
+      }
+      dispatch(deleteUserSuccess(null));
+      return;
+    } catch (error) {
+      dispatch(deleteUserFailure(error));
+      return;
+    }
+  };
+
+  const handleSignOut = async (e) => {
+    e.preventDefault();
+    // sign out logic
+    dispatch(signOutAtStart());
+    try{
+      const res = await fetch(`/api/auth/signout/${currentUser._id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(signOutFailure(data.message));
+        return;
+      }
+      dispatch(signOutSuccess(null));
+      return;
+    }catch(error){
+      dispatch(signOutFailure(error));
       return;
     }
   };
@@ -132,7 +188,7 @@ export default function Profile() {
           placeholder="username"
           defaultValue={currentUser.username}
           className="border p-2 rounded-lg "
-          id='username'
+          id="username"
           disabled
         ></input>
         <input
@@ -140,7 +196,7 @@ export default function Profile() {
           placeholder="email"
           defaultValue={currentUser.email}
           className="border p-2 rounded-lg "
-          id='email'
+          id="email"
           onChange={handleChange}
         ></input>
         <input
@@ -154,15 +210,28 @@ export default function Profile() {
           disabled={isSubmitting}
           className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-90 disabled:opacity-15"
         >
-          {isSubmitting? "Updating" : "Update"}
+          {isSubmitting ? "Updating" : "Update"}
         </button>
       </form>
       <div className="flex justify-between mt-5">
-        <span className="text-center block text-blue-400">Delete Account</span>
-        <span className="text-center block text-red-500">Sign Out</span>
+        <span
+          className="text-center block text-blue-400 cursor-pointer hover:underline"
+          onClick={handleDeleteUser}
+        >
+          Delete Account
+        </span>
+        <span onClick={handleSignOut} className="text-center block text-red-500 cursor-pointer hover:underline">
+          Sign Out
+        </span>
       </div>
-      {error && <span className="text-red-500 text-center block">Error: {error}</span>}
-      {updateSuccess && <span className="text-green-500 text-center block">Profile updated successfully</span>}
+      {error && (
+        <span className="text-red-500 text-center block">Error: {error}</span>
+      )}
+      {updateSuccess && (
+        <span className="text-green-500 text-center block">
+          Profile updated successfully
+        </span>
+      )}
     </div>
   );
 }
