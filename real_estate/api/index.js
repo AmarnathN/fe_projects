@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import authRouter from "./routes/auth.routes.js";
 import cookieParser from "cookie-parser";
 import userRouter from "./routes/user.route.js";
+import profileRouter from "./routes/profile.routes.js";
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ app.listen(3000, () => {
 
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
+app.use("/api/profile", profileRouter);
 
 /* !!! the order of middleware matters */
 
