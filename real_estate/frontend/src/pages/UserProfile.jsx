@@ -6,7 +6,7 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
-import { app } from "../firebase";
+import { app } from "../firebase.js";
 import moment from "moment";
 
 import {
@@ -21,14 +21,14 @@ import {
   signOutFailure,
 } from "../redux/user/userSlice.js";
 
-export default function Profile() {
+export default function UserProfile() {
   const fileRef = useRef(null);
   const { currentUser, error, isSubmitting } = useSelector(
     (state) => state.user
   );
   const dispatch = useDispatch();
 
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState([]);
   const [progress, setProgress] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
   const [formData, setFormData] = useState({});
@@ -44,7 +44,7 @@ export default function Profile() {
     const storage = getStorage(app);
     const fileName =
       moment(new Date().getDate()).format("YYYYMMDDHHmmss") + file.name;
-    const storageRef = ref(storage, `profile_avatars/${fileName}`);
+    const storageRef = ref(storage, `use_profile_avatars/${fileName}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
     uploadTask.on(
       "state_changed",

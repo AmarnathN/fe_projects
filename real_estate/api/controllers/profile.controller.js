@@ -5,6 +5,8 @@ import { errorHandler } from "../utils/error.utils.js";
 
 export const createProfile = async (req, res, next) => {
   try {
+    const data = req.body;
+    data.userRef=req.user.id;
     const profile = await Profile.create(req.body);
     console.log(profile);
     res.status(201).json(profile);

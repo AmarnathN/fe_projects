@@ -1,17 +1,11 @@
 import mongoose from "mongoose";
-
-const phoneNumberSchema = new mongoose.Schema({
-  countryCode: {
-    type: String,
-    required: true,
-    // You may want to add additional validation for the country code, such as a specific format or length
-  },
-  number: {
-    type: String,
-    required: true,
-    // You may want to add additional validation for the phone number, such as a specific format or length
-  },
-});
+import {
+  ASSETS_ENUM,
+  EDUCATION_ENUM,
+  INCOME_ENUM,
+  MARITAL_STATUS_ENUM,
+  PROFESSION_ENUM,
+} from "../config/enums.config.js";
 
 const heightSchema = new mongoose.Schema({
   feet: {
@@ -26,11 +20,11 @@ const heightSchema = new mongoose.Schema({
 
 const profileSchema = new mongoose.Schema(
   {
-    firstname: {
+    firstName: {
       type: String,
       required: true,
     },
-    lastname: {
+    lastName: {
       type: String,
       required: true,
     },
@@ -40,16 +34,20 @@ const profileSchema = new mongoose.Schema(
       unique: true,
     },
     phoneNumber: {
-      type: phoneNumberSchema,
+      type: Number,
       required: true,
     },
     gender: {
       type: String,
       required: true,
-      enum: ["m", "f"],
+      enum: ["male", "female"],
     },
     age: {
       type: Number,
+      required: true,
+    },
+    dob:{
+      type: Date,
       required: true,
     },
     height: {
@@ -59,25 +57,27 @@ const profileSchema = new mongoose.Schema(
     profession: {
       type: String,
       required: true,
-      enum: ["job", "student", "business", "other"],
+      enum: PROFESSION_ENUM,
     },
     education: {
       type: String,
       required: true,
-      enum: ["undergraduate", "graduate", "masters", "phd", "other"],
+      enum: EDUCATION_ENUM,
     },
     maritalStatus: {
       type: String,
       required: true,
-      enum: ["single", "married", "divorced", "widowed", "other"],
+      enum: MARITAL_STATUS_ENUM,
     },
     income: {
-      type: Number,
+      type: String,
+      required: true,
+      enum: INCOME_ENUM
     },
     assets: [
       {
         type: String,
-        enum: ["car", "house", "land", "other"],
+        enum: ASSETS_ENUM,
       },
     ],
     bio: {
@@ -85,22 +85,18 @@ const profileSchema = new mongoose.Schema(
       required: true,
     },
     profilePictures: {
-        type: Array,
+      type: Array,
     },
     userRef: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-    }
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
   },
   {
     timestamps: true,
   }
 );
 
-
 const Profile = mongoose.model("Profile", profileSchema);
 
 export default Profile;
-
-
-

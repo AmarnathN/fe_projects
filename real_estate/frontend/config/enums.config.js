@@ -1,0 +1,5 @@
+export const EDUCATION_ENUM = ["undergraduate", "graduate", "masters", "phd", "other"]
+export const MARITAL_STATUS_ENUM = ["single", "married", "divorced", "widowed", "other"]
+export const ASSETS_ENUM = ["car", "house", "land", "other"]
+export const PROFESSION_ENUM = ["job", "student", "business", "other"]
+export const INCOME_ENUM = ["< 5l", "5l to 10l", "10l to 15l","15l to 25l","> 25l"]
