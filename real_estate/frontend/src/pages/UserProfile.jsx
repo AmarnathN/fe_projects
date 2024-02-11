@@ -28,7 +28,7 @@ export default function UserProfile() {
   );
   const dispatch = useDispatch();
 
-  const [file, setFile] = useState([]);
+  const [file, setFile] = useState(null);
   const [progress, setProgress] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
   const [formData, setFormData] = useState({});
