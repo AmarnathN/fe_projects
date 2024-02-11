@@ -71,35 +71,31 @@ export default function CreateProfile() {
           promises.push(uploadImage(file));
         }
         Promise.all(promises)
-          .then((urls) => {
-            setFormData({
-              ...formData,
-              profilePictures: formData.profilePictures.concat(urls),
+          .then( async (urls) => {
+            formData.profilePictures = urls;
+            const res = await fetch(`/api/profile/create`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(formData),
             });
+            const data = await res.json();
+      
+            setProfileUploading(false);
+            if (data.success === false) {
+              setProfileUploadError(data.message);
+              return;
+            }
+      
+            navigate(`/profile/${data._id}`);
+            return;
           })
           .catch((error) => {
             setProfileUploadError(error.message);
             setProfileUploading(false);
           });
       }
-
-      const res = await fetch(`/api/profile/create`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-      const data = await res.json();
-
-      setProfileUploading(false);
-      if (data.success === false) {
-        setProfileUploadError(data.message);
-        return;
-      }
-
-      navigate(`/profile/${data._id}`);
-      return;
     } catch (error) {
       setProfileUploadError(error);
       setProfileUploading(false);
