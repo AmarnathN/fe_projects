@@ -113,3 +113,7 @@ export const signout = async (req, res, next) =>{
   }
   res.clearCookie("access_token").status(200).json("User has been signed out");
 } 
+
+export const check_token = async (req, res, next) =>{
+  res.status(200).json("User has been active token");
+} 

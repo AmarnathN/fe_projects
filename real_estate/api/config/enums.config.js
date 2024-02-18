@@ -3,3 +3,4 @@ export const MARITAL_STATUS_ENUM = ["single", "married", "divorced", "widowed", 
 export const ASSETS_ENUM = ["car", "house", "land", "other"]
 export const PROFESSION_ENUM = ["job", "student", "business", "other"]
 export const INCOME_ENUM = ["< 5l", "5l to 10l", "10l to 15l","15l to 25l","> 25l"]
+export const GENDER_ENUM = ["male", "female"]

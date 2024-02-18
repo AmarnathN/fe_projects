@@ -1,13 +1,20 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
 import { useDispatch, useSelector } from "react-redux";
-import { signInFailure, signInStart, signInSuccess } from "../redux/user/userSlice.js";
+import {
+  signInFailure,
+  signInStart,
+  signInSuccess,
+} from "../redux/user/userSlice.js";
 import OAuth from "../components/OAuth.jsx";
+import { Button } from "../components/shadcn/components/ui/button.jsx";
+import { Input } from "../components/shadcn/components/ui/input.jsx";
+import { Label } from "../components/shadcn/components/ui/label.jsx";
+import { Card } from "../components/shadcn/components/ui/card.jsx";
 
 export default function Signin() {
   const [formData, setFormData] = useState({});
-  const { error, isSubmitting} = useSelector((state) => state.user);
+  const { error, isSubmitting } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -19,7 +26,7 @@ export default function Signin() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // prevent refreshing the page
+    e.preventDefault(); 
     console.log(formData);
     dispatch(signInStart());
 
@@ -47,7 +54,7 @@ export default function Signin() {
         return;
       }
       dispatch(signInSuccess(data));
-      navigate("/");
+      navigate("/home");
       console.log(data);
     } catch (err) {
       dispatch(signInSuccess(err.message));
@@ -56,38 +63,61 @@ export default function Signin() {
   };
 
   return (
-    <div className="max-w-lg mx-auto">
-      <h1 className="text-3xl text-center font-semibold my-10">Sign In</h1>
-      <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Username"
-          className="border p-3 rounded-lg m-1"
-          id="username"
-          onChange={handleChange}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          className="border p-3 rounded-lg m-1"
-          id="password"
-          onChange={handleChange}
-        />
-        <button
-          disabled={isSubmitting}
-          className="bg-slate-700 text-white p-3 rounded-lg m-1 uppercase"
-        >
-          {isSubmitting ? "Logging..." : "Sign In"}
-        </button>
-        <OAuth/>
-      </form>
-      <div className="flex gap-2 mt-2">
-        <p>Do not have an account?</p>
-        <Link to={"/sign-up"}>
-          <span className="text-blue-500"> Sign Up </span>
-        </Link>
-      </div>
-      {(error === null || error.length > 1 )&& <p className="text-red-500">{error}</p>}
+    <div className="flex justify-center mx-auto items-center opacity-85">
+      <Card className="max-w-lg m-4 p-4 flex flex-col gap-6 flex-grow">
+        <h1 className="text-3xl text-center font-semibold my-10">Sign In</h1>
+        <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
+          <div className="grid w-full items-center m-1 gap-1.5">
+            <Label htmlFor="email">Username</Label>
+            <Input
+              type="text"
+              placeholder="Username"
+              className="border p-3 rounded-lg  "
+              id="username"
+              onChange={handleChange}
+            />
+          </div>
+          <div className="grid w-full items-center m-1 gap-1.5">
+            <Label htmlFor="password">Password</Label>
+            <Input
+              type="password"
+              placeholder="Password"
+              className="border p-3 rounded-lg"
+              id="password"
+              onChange={handleChange}
+            />
+          </div>
+          <Button disabled={isSubmitting} className="m-1 w-full">
+            {isSubmitting ? "Logging..." : "Sign In"}
+          </Button>
+        </form>
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-background px-2 text-muted-foreground">
+              Or continue with
+            </span>
+          </div>
+        </div>
+        <OAuth className={"m-1"} />
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t" />
+          </div>
+        </div>
+        <p className="px-8 text-center text-sm text-muted-foreground">
+          <p>Do not have an account?</p>
+          <Link to={"/sign-up"}>
+            <span className="text-blue-500"> Sign Up </span>
+          </Link>
+        </p>
+
+        {(error === null || error.length > 1) && (
+          <p className="text-red-500">{error}</p>
+        )}
+      </Card>
     </div>
   );
 }

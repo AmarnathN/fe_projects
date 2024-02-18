@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import {
   ASSETS_ENUM,
   EDUCATION_ENUM,
+  GENDER_ENUM,
   INCOME_ENUM,
   MARITAL_STATUS_ENUM,
   PROFESSION_ENUM,
@@ -40,7 +41,7 @@ const profileSchema = new mongoose.Schema(
     gender: {
       type: String,
       required: true,
-      enum: ["male", "female"],
+      enum: GENDER_ENUM,
     },
     age: {
       type: Number,
@@ -84,9 +85,10 @@ const profileSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    profilePictures: {
-      type: Array,
-    },
+    profilePictures:[ {
+      type: String,
+      required: true,
+    }],
     userRef: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

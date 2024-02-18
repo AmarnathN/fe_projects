@@ -1,13 +1,16 @@
 import React from "react";
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "@firebase/auth";
 import { app } from "../firebase.js";
-import { useDispatch } from "react-redux";
-import { signInSuccess,signInFailure } from "../redux/user/userSlice.js";
+import { useDispatch, useSelector } from "react-redux";
+import { signInSuccess, signInFailure } from "../redux/user/userSlice.js";
 import { useNavigate } from "react-router-dom";
+import { Button } from "./shadcn/components/ui/button.jsx";
+import { FaGoogle , FaSpinner} from "react-icons/fa";
 
-export default function OAuth() {
+export default function OAuth({className}) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { error, isSubmitting } = useSelector((state) => state.user);
 
   const handleGoogleClick = async () => {
     try {
@@ -42,12 +45,19 @@ export default function OAuth() {
   };
 
   return (
-    <button
-      onClick={handleGoogleClick}
+    <Button
+      variant="secondary"
       type="button"
-      className="bg-blue-500 text-white p-3 rounded-lg m-1"
+      disabled={isSubmitting}
+      className={"w-full" + className}
+      onClick={handleGoogleClick}
     >
-      Continue with Google
-    </button>
+      {isSubmitting ? (
+        <FaSpinner className="mr-2 animate-spin" />
+      ) : (
+        <FaGoogle className="mr-2" />
+      )}{" "}
+      Google
+    </Button>
   );
 }

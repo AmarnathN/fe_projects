@@ -121,30 +121,6 @@ export default function UserProfile() {
     }
   };
 
-  const handleSignOut = async (e) => {
-    e.preventDefault();
-    // sign out logic
-    dispatch(signOutAtStart());
-    try{
-      const res = await fetch(`/api/auth/signout/${currentUser._id}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const data = await res.json();
-      if (data.success === false) {
-        dispatch(signOutFailure(data.message));
-        return;
-      }
-      dispatch(signOutSuccess(null));
-      return;
-    }catch(error){
-      dispatch(signOutFailure(error));
-      return;
-    }
-  };
-
   const handleFile = (e) => {
     e.preventDefault();
     setFile(e.target.files[0]);
@@ -153,7 +129,7 @@ export default function UserProfile() {
 
   return (
     <div className="max-w-lg mx-auto">
-      <h1 className="text-center text-4xl font-bold m-10">Profile</h1>
+      <h1 className="text-center text-4xl font-bold m-10">My Account</h1>
       <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
         <input
           type="file"
@@ -213,15 +189,12 @@ export default function UserProfile() {
           {isSubmitting ? "Updating" : "Update"}
         </button>
       </form>
-      <div className="flex justify-between mt-5">
+      <div className="flex justify-center mt-5">
         <span
           className="text-center block text-blue-400 cursor-pointer hover:underline"
           onClick={handleDeleteUser}
         >
           Delete Account
-        </span>
-        <span onClick={handleSignOut} className="text-center block text-red-500 cursor-pointer hover:underline">
-          Sign Out
         </span>
       </div>
       {error && (
