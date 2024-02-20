@@ -25,7 +25,7 @@ import {
 } from "../redux/user/userSlice.js";
 
 export default function Header() {
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser, isAuthenticated } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
@@ -65,7 +65,7 @@ export default function Header() {
           </Link>
         </Badge>
         <ul className="flex items-center gap-4 z-10 opacity-100">
-          { currentUser && currentUser.username ? (
+          { currentUser && currentUser.username && isAuthenticated? (
             <>
               <Link to="/">
                 <li className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">

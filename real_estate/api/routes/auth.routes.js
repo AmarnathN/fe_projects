@@ -10,7 +10,7 @@ authRouter.post("/signin", signIn);
 
 authRouter.post("/signin_google", signInGoogle);
 
-authRouter.get("/signout/:id", verifyToken, signout);
+authRouter.get("/signout/:id", signout);
 
 authRouter.get("/check_token", verifyToken, check_token);
 

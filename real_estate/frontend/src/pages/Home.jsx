@@ -1,21 +1,42 @@
-import { Sidebar } from "flowbite-react";
-import {
-  HiArrowSmRight,
-  HiChartPie,
-  HiInbox,
-  HiShoppingBag,
-  HiTable,
-  HiUser,
-  HiViewBoards,
-} from "react-icons/hi";
-import PorfilesList from "./PorfilesList.jsx";
+import React from "react";
+import { TypewriterEffectSmooth } from "../components/animations/components/ui/typewriter-effect.tsx";
+import { Card } from "../components/shadcn/components/ui/card.jsx";
+import { Label } from "flowbite-react";
+import { ScrollArea } from "../components/shadcn/components/ui/scroll-area.jsx";
 
 export default function Home() {
+  const words = [
+    {
+      text: "Match",
+      className: "text-xl sm:text-2xl xl:text-5xl",
+    },
+    {
+      text: "your",
+      className: "text-xl sm:text-2xl xl:text-5xl",
+    },
+    {
+      text: "Soulmate",
+      className: "text-xl sm:text-2xl xl:text-5xl",
+    },
+    {
+      text: " @ ",
+      className: "text-xl sm:text-2xl xl:text-5xl",
+    },
+    {
+      text: "Parinaye.",
+      className: "text-2xl sm:text-3xl xl:text-10xl text-primary",
+    },
+  ];
   return (
-    <div className="flex sm:min-w-full sm:min-h-screen">
-      <blockquote className="flex-1 sm:min-w-full sm:min-h-full">
-        <h1 className="text-2xl font-bold">Welcome to Real Parinaye</h1>
-      </blockquote>
+    <div className="mx-auto h-screen shadow-lg">
+      <div className="flex flex-col items-center mt-60 justify-center">
+        <div >
+          <Label className="text-sm sm:text-base">
+            The road to "US" starts from here
+          </Label>
+          <TypewriterEffectSmooth words={words} className="flex items-center" />
+        </div>
+      </div>
     </div>
   );
 }

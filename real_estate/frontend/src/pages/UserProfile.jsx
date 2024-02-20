@@ -128,7 +128,10 @@ export default function UserProfile() {
   };
 
   return (
-    <div className="max-w-lg mx-auto">
+    {
+      currentUser && currentUser._id ?
+   
+   (<div className="max-w-lg mx-auto">
       <h1 className="text-center text-4xl font-bold m-10">My Account</h1>
       <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
         <input
@@ -205,6 +208,7 @@ export default function UserProfile() {
           Profile updated successfully
         </span>
       )}
-    </div>
+    </div>)
+    : (null)}
   );
 }

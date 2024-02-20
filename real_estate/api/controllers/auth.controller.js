@@ -64,7 +64,7 @@ export const signInGoogle = async (req, res, next) => {
     const validUser = await User.findOne({ email });
     if (validUser) {
       const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET, {
-        expiresIn: 3600,
+        expiresIn: 5,
       });
       const { password: passwordFromUser, ...restOfUser } = validUser._doc;
       res
@@ -93,7 +93,7 @@ export const signInGoogle = async (req, res, next) => {
       await newUser.save();
 
       const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-        expiresIn: 3600,
+        expiresIn: "5s",
       });
       const { password: passwordFromUser, ...restOfUser } = newUser._doc;
       res
@@ -108,12 +108,19 @@ export const signInGoogle = async (req, res, next) => {
 
 
 export const signout = async (req, res, next) =>{
-  if(req.params.id !== req.user.id){
-    return next(errorHandler(401, "Unauthorized! you can only signout your account"));
-  }
   res.clearCookie("access_token").status(200).json("User has been signed out");
 } 
 
 export const check_token = async (req, res, next) =>{
-  res.status(200).json("User has been active token");
+  try {
+    const validUser = await User.findOne({ _id: req.user.id });
+    if (!validUser) {
+      next(errorHandler(404, "User not found as in token"));
+      return;
+    }
+     const { password: passwordFromUser, ...restOfUser } = validUser._doc;
+    res.status(200).json({ ...restOfUser});
+  } catch (error) {
+    next(error);
+  }
 } 

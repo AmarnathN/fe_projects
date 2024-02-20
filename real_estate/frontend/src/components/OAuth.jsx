@@ -37,7 +37,7 @@ export default function OAuth({className}) {
         return;
       }
       dispatch(signInSuccess(data));
-      navigate("/");
+      navigate("/home");
       return;
     } catch (err) {
       dispatch(signInFailure(err.message));

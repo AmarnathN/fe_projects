@@ -4,6 +4,7 @@ const initialState = {
   currentUser: null,
   error: null,
   isSubmitting: false,
+  isAuthenticated: false,
 };
 
 const userSlice = createSlice({
@@ -13,15 +14,18 @@ const userSlice = createSlice({
     signInStart: (state) => {
       state.isSubmitting = true;
       state.error = null;
+      state.isAuthenticated = false;
     },
     signInSuccess: (state, action) => {
       state.isSubmitting = false;
       state.currentUser = action.payload;
       state.error = null;
+      state.isAuthenticated = true;
     },
     signInFailure: (state, action) => {
       state.isSubmitting = false;
       state.error = action.payload;
+      state.isAuthenticated = false;
     },
     updateUserAtStart: (state) => {
       state.isSubmitting = true;
@@ -79,5 +83,25 @@ export const {
   signOutSuccess,
   signOutFailure,
 } = userSlice.actions;
+
+export const validateToken = () => async (dispatch) => {
+  dispatch(signInStart());
+  try {
+    const res = await fetch("/api/auth/check_token", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await res.json();
+    if (data.success === false) {
+      dispatch(signInFailure(data.message));
+      return;
+    }
+    dispatch(signInSuccess(data));
+  } catch (err) {
+    dispatch(signInFailure(err.message));
+  }
+};
 
 export default userSlice.reducer;

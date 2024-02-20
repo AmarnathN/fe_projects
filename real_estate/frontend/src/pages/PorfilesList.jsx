@@ -112,16 +112,6 @@ export default function PorfilesList() {
 
   return (
     <div className="flex items-center justify-center border-2">
-      <video
-        autoplay
-        loop
-        muted
-        class="absolute z-10 w-auto  
-            min-w-full min-h-full max-w-none"
-      >
-        <source src="../assets/wedding_background.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
       <section className="flex z-30 flex-row justify-center m-4 h-lvh  flex-grow">
         <div className="overflow-hidden rounded-[0.5rem] border bg-background shadow-md md:shadow-xl opacity-90 sm:min-w-full ">
           <div className="flex flex-col">
@@ -286,19 +276,7 @@ export default function PorfilesList() {
                       </div>
                     </Card>
                   ))}
-                  {/* <DataTable
-                  data={profiles}
-                  columns={[
-                    {
-                      accessorKey: "profiles",
-                      header: "Profiles",
-                    },
-                  ]}
-                /> */}
                 </ScrollArea>
-                <div className="h-30">
-                  <p>asmfhsadljhfvadf</p>
-                </div>
               </section>
             </div>
           </div>
