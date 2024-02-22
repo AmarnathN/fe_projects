@@ -16,9 +16,14 @@ import ForgotPassword from "./pages/ForgotPassword";
 export default function App() {
   return (
     <BrowserRouter>
-      <div className="min-w-full min-h-screen" style={{
-        "background-image" : "linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.6)), url('https://images.pexels.com/photos/13873241/pexels-photo-13873241.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')"
-      }}>
+      <div className="min-w-full min-h-screen 
+      bg-[linear-gradient(to_right_bottom,rgba(5,5,5,0.8),rgba(5,5,5,0.8)),url('https://images.pexels.com/photos/12432460/pexels-photo-12432460.jpeg?auto=compress&cs=tinysrgb&w=800')]
+      bg-cover bg-center
+      md:bg-[linear-gradient(to_right_bottom,rgba(5,5,5,0.8),rgba(5,5,5,0.8)),url('https://images.pexels.com/photos/4121047/pexels-photo-4121047.jpeg?auto=compress&cs=tinysrgb&w=800')]
+      
+      lg:bg-[linear-gradient(to_right_bottom,rgba(5,5,5,0.8),rgba(5,5,5,0.8)),url('https://images.pexels.com/photos/13873241/pexels-photo-13873241.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')]"
+      //  style={{ "background-image" : "linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.6))" }}
+       >
         {/* <img
           src="https://images.pexels.com/photos/13873241/pexels-photo-13873241.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
           alt="background"

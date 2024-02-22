@@ -28,14 +28,12 @@ export default function Home() {
     },
   ];
   return (
-    <div className="mx-auto h-screen shadow-lg">
-      <div className="flex flex-col items-center mt-60 justify-center">
-        <div >
-          <Label className="text-sm sm:text-base">
-            The road to "US" starts from here
-          </Label>
-          <TypewriterEffectSmooth words={words} className="flex items-center" />
-        </div>
+    <div className="mx-auto shadow-lg h-screen">
+      <div className="flex flex-col h-2/3 items-center justify-center">
+        <Label className="text-sm sm:text-base">
+          The road to "US" starts from here
+        </Label>
+        <TypewriterEffectSmooth words={words} className="flex items-center" />
       </div>
     </div>
   );

@@ -212,19 +212,19 @@ export default function PorfilesList() {
                       </div>
                     )}
                     {[...profiles, ...profiles, ...profiles].map((profile) => (
-                      <Card className="col-span-1 rounded-lg z-200 shadow-xl m-4 hover:scale-105 hover:shadow-md hover:shadow-primary-foreground opacity-100">
+                      <Card className="col-span-1 rounded-lg shadow-xl m-4 hover:scale-105 hover:shadow-md hover:shadow-primary-foreground opacity-100">
                         <div
                           key={profile._id}
-                          className="flex flex-row w-full h-30 sm:h-60 rounded-lg"
+                          className="flex flex-row  rounded-lg justify-between items-center"
                         >
                           {/* <Card className=""> */}
                           <img
                             src={profile.profilePictures[0]}
                             alt="profile"
-                            className="flex-grow w-1/3 h-30 rounded-lg object-fit border-4 border-primary-foreground"
+                            className="w-1/3 h-[150px] rounded-lg object-cover border-4 border-primary-foreground "
                           />
                           {/* </Card> */}
-                          <div className="flex flex-col items-center justify-between m-1 sm:m-4 w-2/3 gap-2">
+                          <div className="flex flex-col items-center justify-between p-2 m-2 w-2/3 gap-2">
                             <div className="flex flex-row items-center justify-between w-full">
                               <p className="text-lg font-bold text-yellow-600">
                                 {profile.firstName + " " + profile.lastName}
