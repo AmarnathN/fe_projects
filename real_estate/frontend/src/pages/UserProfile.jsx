@@ -128,87 +128,89 @@ export default function UserProfile() {
   };
 
   return (
-    {
-      currentUser && currentUser._id ?
-   
-   (<div className="max-w-lg mx-auto">
-      <h1 className="text-center text-4xl font-bold m-10">My Account</h1>
-      <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
-        <input
-          type="file"
-          ref={fileRef}
-          className="border p-2 rounded-lg"
-          hidden
-          accept="image/*"
-          onChange={handleFile}
-        ></input>
+    <>
+      {currentUser && currentUser._id ? (
+        <div className="max-w-lg mx-auto">
+          <h1 className="text-center text-4xl font-bold m-10">My Account</h1>
+          <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
+            <input
+              type="file"
+              ref={fileRef}
+              className="border p-2 rounded-lg"
+              hidden
+              accept="image/*"
+              onChange={handleFile}
+            ></input>
 
-        <img
-          onClick={() => fileRef.current.click()}
-          src={formData.avatar || currentUser.avatar}
-          alt="profile_pic"
-          className="rounded-full h-24 w-24 object-cover cursor-pointer self-center m-2"
-        />
-        {fileUploadError ? (
-          <span className="text-center block text-red-400">
-            {"Upload failed, please try again"}
-          </span>
-        ) : progress > 0 && progress < 100 ? (
-          <span className="text-center block text-blue-400">
-            {"Upload is " + progress + "% done"}
-          </span>
-        ) : progress === 100 ? (
-          <span className="text-center block text-green-400">
-            {"Upload is complete"}
-          </span>
-        ) : null}
-        <input
-          type="text"
-          placeholder="username"
-          defaultValue={currentUser.username}
-          className="border p-2 rounded-lg "
-          id="username"
-          disabled
-        ></input>
-        <input
-          type="email"
-          placeholder="email"
-          defaultValue={currentUser.email}
-          className="border p-2 rounded-lg "
-          id="email"
-          onChange={handleChange}
-        ></input>
-        <input
-          type="password"
-          placeholder={"change password"}
-          className="border p-2 rounded-lg "
-          id="password"
-          onChange={handleChange}
-        ></input>
-        <button
-          disabled={isSubmitting}
-          className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-90 disabled:opacity-15"
-        >
-          {isSubmitting ? "Updating" : "Update"}
-        </button>
-      </form>
-      <div className="flex justify-center mt-5">
-        <span
-          className="text-center block text-blue-400 cursor-pointer hover:underline"
-          onClick={handleDeleteUser}
-        >
-          Delete Account
-        </span>
-      </div>
-      {error && (
-        <span className="text-red-500 text-center block">Error: {error}</span>
-      )}
-      {updateSuccess && (
-        <span className="text-green-500 text-center block">
-          Profile updated successfully
-        </span>
-      )}
-    </div>)
-    : (null)}
+            <img
+              onClick={() => fileRef.current.click()}
+              src={formData.avatar || currentUser.avatar}
+              alt="profile_pic"
+              className="rounded-full h-24 w-24 object-cover cursor-pointer self-center m-2"
+            />
+            {fileUploadError ? (
+              <span className="text-center block text-red-400">
+                {"Upload failed, please try again"}
+              </span>
+            ) : progress > 0 && progress < 100 ? (
+              <span className="text-center block text-blue-400">
+                {"Upload is " + progress + "% done"}
+              </span>
+            ) : progress === 100 ? (
+              <span className="text-center block text-green-400">
+                {"Upload is complete"}
+              </span>
+            ) : null}
+            <input
+              type="text"
+              placeholder="username"
+              defaultValue={currentUser.username}
+              className="border p-2 rounded-lg "
+              id="username"
+              disabled
+            ></input>
+            <input
+              type="email"
+              placeholder="email"
+              defaultValue={currentUser.email}
+              className="border p-2 rounded-lg "
+              id="email"
+              onChange={handleChange}
+            ></input>
+            <input
+              type="password"
+              placeholder={"change password"}
+              className="border p-2 rounded-lg "
+              id="password"
+              onChange={handleChange}
+            ></input>
+            <button
+              disabled={isSubmitting}
+              className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-90 disabled:opacity-15"
+            >
+              {isSubmitting ? "Updating" : "Update"}
+            </button>
+          </form>
+          <div className="flex justify-center mt-5">
+            <span
+              className="text-center block text-blue-400 cursor-pointer hover:underline"
+              onClick={handleDeleteUser}
+            >
+              Delete Account
+            </span>
+          </div>
+          {error && (
+            <span className="text-red-500 text-center block">
+              Error: {error}
+            </span>
+          )}
+          {updateSuccess && (
+            <span className="text-green-500 text-center block">
+              Profile updated successfully
+            </span>
+          )}
+        </div>
+      ) : null}
+    </>
   );
 }

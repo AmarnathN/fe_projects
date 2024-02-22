@@ -90,6 +90,11 @@ export default function Signin() {
           <Button disabled={isSubmitting} className="m-1 w-full">
             {isSubmitting ? "Logging..." : "Sign In"}
           </Button>
+          <div className="flex justify-center">
+          <Link to={"/forgot-password"} className="m-1 justify-center">
+            <span className="text-md text-blue-500">Forgot Password?</span>
+          </Link>
+          </div>
         </form>
         <div className="relative">
           <div className="absolute inset-0 flex items-center">

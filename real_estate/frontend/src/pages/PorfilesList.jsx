@@ -111,28 +111,28 @@ export default function PorfilesList() {
   }, []);
 
   return (
-    <div className="flex items-center justify-center border-2">
+    <div className="flex items-center justify-center border-2 opacity-90">
       <section className="flex z-30 flex-row justify-center m-4 h-lvh  flex-grow">
         <div className="overflow-hidden rounded-[0.5rem] border bg-background shadow-md md:shadow-xl opacity-90 sm:min-w-full ">
           <div className="flex flex-col">
             <div className="flex flex-row justify-end m-2">
               <Dialog>
-                <ScrollArea className="rounded-md border max-h-96 overflow-scroll ">
-                  <DialogTrigger asChild>
-                    <Button variant="secondary">Create Profile</Button>
-                  </DialogTrigger>
-                  <DialogContent className="sm:max-w-4xl ">
-                    <DialogHeader>
-                      <DialogTitle>Create profile</DialogTitle>
-                      <DialogDescription>
-                        Create your profile here. Click save when you're done.
-                      </DialogDescription>
-                    </DialogHeader>
+                <DialogTrigger asChild>
+                  <Button variant="secondary">Create Profile</Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-4xl max-h-screen">
+                  <DialogHeader>
+                    <DialogTitle>Create profile</DialogTitle>
+                    <DialogDescription>
+                      Create your profile here. Click save when you're done.
+                    </DialogDescription>
+                  </DialogHeader>
 
+                  <ScrollArea className="rounded-md border max-h-lvh overflow-scroll">
                     <CreateProfile />
-                  </DialogContent>
-                  <ScrollBar orientation="horizontal" />
-                </ScrollArea>
+                    <ScrollBar orientation="horizontal" />
+                  </ScrollArea>
+                </DialogContent>
               </Dialog>
             </div>
             <Separator />
@@ -201,81 +201,85 @@ export default function PorfilesList() {
                   </Accordion>
                 </div>
               </section>
-              <section className="grid md:col-span-3 items-start">
+              <section className="sm:col-span-2 md:col-span-3 items-start">
                 <ScrollArea className="rounded-md border max-h-dvh overflow-scroll">
-                  {profilesLoading && (
-                    <div className="flex flex-col fle-grow m-2 sm:max-w-2xl  rounded-lg shadow-xl">
-                      {[...Array(6).keys()].map((_, i) => (
-                        <CardPlaceHolder />
-                      ))}
-                    </div>
-                  )}
-                  {[...profiles, ...profiles, ...profiles].map((profile) => (
-                    <Card
-                      key={profile._id}
-                      className="flex flex-row p-1 max-h-60 sm:p-4 sm:max-w-2xl m-2 rounded-lg shadow-xl"
-                    >
-                      <Card className="flex justify-center flex-grow w-1/3">
-                        <img
-                          src={profile.profilePictures[0]}
-                          alt="profile"
-                          className="bg-slate-50 rounded-lg p-1 object-fill"
-                        />
-                      </Card>
-                      <div className="flex flex-col items-center justify-between m-1 sm:m-4 w-2/3 gap-2">
-                        <div className="flex flex-row items-center justify-between w-full">
-                          <p className="text-lg font-bold text-yellow-600">
-                            {profile.firstName + " " + profile.lastName}
-                          </p>
-                          <p className="text-lg font-bold">
-                            <FaEdit />
-                          </p>
-                        </div>
-                        <div className="flex flex-row items-center justify-between w-full">
-                          <p className="text-sm font-medium leading-none">
-                            {profile.age} years
-                          </p>
-                        </div>
-                        <Separator />
-                        <div className="flex flex-row items-center justify-between w-full">
-                          <div className="flex flex-col space-y-1 items-start">
-                            <p className="text-sm text-muted-foreground">
-                              {"Profession"}
-                            </p>
-                            <p className="text-sm font-medium leading-none">
-                              {profile.profession.toUpperCase()}
-                            </p>
-                          </div>
-                          <div className="flex flex-col space-y-1 items-end">
-                            <p className="text-sm text-muted-foreground">
-                              {"Education"}
-                            </p>
-                            <p className="text-sm font-medium leading-none">
-                              {profile.education.toUpperCase()}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex flex-row items-center justify-between w-full">
-                          <div className="flex flex-col space-y-1 items-start">
-                            <p className="text-sm text-muted-foreground">
-                              {"Marital Status"}
-                            </p>
-                            <p className="text-sm font-medium leading-none">
-                              {profile.maritalStatus.toUpperCase()}
-                            </p>
-                          </div>
-                          <div className="flex flex-col space-y-1 items-end">
-                            <p className="text-sm text-muted-foreground">
-                              {"Income"}
-                            </p>
-                            <p className="text-sm font-medium leading-none">
-                              {profile.income.toUpperCase()}
-                            </p>
-                          </div>
-                        </div>
+                  <div className="grid grid-cols-1 xl:grid-cols-2 m-4 ">
+                    {profilesLoading && (
+                      <div className="flex flex-col fle-grow m-2 sm:max-w-2xl  rounded-lg shadow-xl">
+                        {[...Array(6).keys()].map((_, i) => (
+                          <CardPlaceHolder />
+                        ))}
                       </div>
-                    </Card>
-                  ))}
+                    )}
+                    {[...profiles, ...profiles, ...profiles].map((profile) => (
+                      <Card className="col-span-1 rounded-lg z-200 shadow-xl m-4 hover:scale-105 hover:shadow-md hover:shadow-primary-foreground opacity-100">
+                        <div
+                          key={profile._id}
+                          className="flex flex-row w-full h-30 sm:h-60 rounded-lg"
+                        >
+                          {/* <Card className=""> */}
+                          <img
+                            src={profile.profilePictures[0]}
+                            alt="profile"
+                            className="flex-grow w-1/3 h-30 rounded-lg object-fit border-4 border-primary-foreground"
+                          />
+                          {/* </Card> */}
+                          <div className="flex flex-col items-center justify-between m-1 sm:m-4 w-2/3 gap-2">
+                            <div className="flex flex-row items-center justify-between w-full">
+                              <p className="text-lg font-bold text-yellow-600">
+                                {profile.firstName + " " + profile.lastName}
+                              </p>
+                              <p className="text-lg font-bold">
+                                <FaEdit />
+                              </p>
+                            </div>
+                            <div className="flex flex-row items-center justify-between w-full">
+                              <p className="text-sm font-medium leading-none">
+                                {profile.age} years
+                              </p>
+                            </div>
+                            <Separator />
+                            <div className="flex flex-row items-center justify-between w-full">
+                              <div className="flex flex-col space-y-1 items-start">
+                                <p className="text-sm text-muted-foreground">
+                                  {"Profession"}
+                                </p>
+                                <p className="text-sm font-medium leading-none">
+                                  {profile.profession.toUpperCase()}
+                                </p>
+                              </div>
+                              <div className="flex flex-col space-y-1 items-end">
+                                <p className="text-sm text-muted-foreground">
+                                  {"Education"}
+                                </p>
+                                <p className="text-sm font-medium leading-none">
+                                  {profile.education.toUpperCase()}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="flex flex-row items-center justify-between w-full">
+                              <div className="flex flex-col space-y-1 items-start">
+                                <p className="text-sm text-muted-foreground">
+                                  {"Marital Status"}
+                                </p>
+                                <p className="text-sm font-medium leading-none">
+                                  {profile.maritalStatus.toUpperCase()}
+                                </p>
+                              </div>
+                              <div className="flex flex-col space-y-1 items-end">
+                                <p className="text-sm text-muted-foreground">
+                                  {"Income"}
+                                </p>
+                                <p className="text-sm font-medium leading-none">
+                                  {profile.income.toUpperCase()}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
                 </ScrollArea>
               </section>
             </div>

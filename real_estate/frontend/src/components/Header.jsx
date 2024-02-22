@@ -55,7 +55,7 @@ export default function Header() {
   };
 
   return (
-    <div className="bg-secondary shadow-md opacity-85">
+    <Card className="shadow-md opacity-85">
       <div className="flex justify-between items-center max-w-6xl mx-auto p-3">
         <Badge variant="default" className={"bg-gradient-to-r z-10 from-primary"}>
           <Link to="/">
@@ -123,6 +123,6 @@ export default function Header() {
           )}
         </ul>
       </div>
-    </div>
+    </Card>
   );
 }
