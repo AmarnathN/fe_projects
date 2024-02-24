@@ -9,7 +9,7 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
-import { app } from "../firebase";
+import { app } from "../../firebase";
 import moment from "moment";
 import {
   ASSETS_ENUM,
@@ -18,7 +18,7 @@ import {
   INCOME_ENUM,
   MARITAL_STATUS_ENUM,
   GENDER_ENUM,
-} from "../../config/enums.config";
+} from "../../../config/enums.config";
 import {
   Form,
   FormControl,
@@ -27,37 +27,36 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../components/shadcn/components/ui/form";
+} from "../shadcn/components/ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Input } from "../components/shadcn/components/ui/input";
+import { Input } from "../shadcn/components/ui/input";
 import {
   RadioGroup,
   RadioGroupItem,
-} from "../components/shadcn/components/ui/radio-group";
-import { Label } from "../components/shadcn/components/ui/label";
-import { Slider } from "../components/shadcn/components/ui/slider";
+} from "../shadcn/components/ui/radio-group";
+import { Label } from "../shadcn/components/ui/label";
+import { Slider } from "../shadcn/components/ui/slider";
 import {
   Popover,
   PopoverTrigger,
   PopoverContent,
-} from "../components/shadcn/components/ui/popover";
+} from "../shadcn/components/ui/popover";
 import { FaCalendar } from "react-icons/fa";
-import { Calendar } from "../components/shadcn/components/ui/calendar";
-import { Button } from "../components/shadcn/components/ui/button";
-import { cn } from "../components/shadcn/lib/utils";
+import { Calendar } from "../shadcn/components/ui/calendar";
+import { Button } from "../shadcn/components/ui/button";
+import { cn } from "../shadcn/lib/utils";
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "../components/shadcn/components/ui/select";
-import { Checkbox } from "../components/shadcn/components/ui/checkbox";
-import { Textarea } from "../components/shadcn/components/ui/textarea";
+} from "../shadcn/components/ui/select";
+import { Textarea } from "../shadcn/components/ui/textarea";
+import { Separator } from "../shadcn/components/ui/separator";
 
 const formSchema = z.object({
   firstName: z.string().min(1),
@@ -192,9 +191,6 @@ export default function CreateProfile() {
     });
   };
 
-  console.log(formData);
-  console.log(imageFiles);
-
   const handleChange = (e) => {
     console.log(e.target);
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -251,7 +247,7 @@ export default function CreateProfile() {
   return (
     <Form className="mx-auto p-3 max-w-6xl items-center" {...form} >
       <form className="flex flex-col p-5 sm:flex-row m-5  rounded justify-between shadow-xl">
-        <div className="flex flex-col sm:w-2/3 border-r-2 m-2 p-2 ">
+        <div className="flex flex-col sm:w-2/3 border-r-2 p-2 ">
           <div className="flex flex-col justify-center sm:flex-row sm:justify-between my-2">
             <div className="flex flex-col sm:w-1/2 flex-grow mx-2">
               <FormField
@@ -335,6 +331,7 @@ export default function CreateProfile() {
               />
             </div>
           </div>
+          <Separator />
           <div className="flex flex-col gap-2 sm:gap-0 sm:flex-row justify-between m-2">
             <RadioGroup
               defaultValue={formData.gender === "male"}
@@ -407,7 +404,7 @@ export default function CreateProfile() {
               </div>
             </div>
           </div>
-
+          <Separator />
           <div className="grid grid-col-1 sm:grid-cols-3 m-2 gap-4">
             <div className="grid grid-cols-1 gap-2 ">
               <FormField
@@ -571,6 +568,7 @@ export default function CreateProfile() {
               </Select>
             </div>
           </div>
+          <Separator />
           <div className="grid col-span-1 sm:col-span-3 m-2 gap-4">
             <div className="grid grid-cols-1 gap-2  ">
               <Label class="text-sm font-medium">Assets</Label>

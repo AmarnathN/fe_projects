@@ -55,7 +55,7 @@ export default function Header() {
   };
 
   return (
-    <Card className="shadow-md opacity-85">
+    <Card className="shadow-md opacity-85 rounded-none">
       <div className="flex justify-between items-center max-w-6xl mx-auto p-3">
         <Badge variant="default" className={"bg-gradient-to-r z-10 from-primary"}>
           <Link to="/">
@@ -64,7 +64,7 @@ export default function Header() {
             </h1>
           </Link>
         </Badge>
-        <ul className="flex items-center gap-4 z-10 opacity-100">
+        <ul className="flex items-center gap-4 z-10 opacity-85">
           { currentUser && currentUser.username && isAuthenticated? (
             <>
               <Link to="/">

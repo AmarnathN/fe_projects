@@ -29,7 +29,7 @@ export default function Home() {
   ];
   return (
     <div className="mx-auto shadow-lg h-screen">
-      <div className="flex flex-col h-2/3 items-center justify-center">
+      <div className="flex flex-col h-2/3 items-center justify-center text-white">
         <Label className="text-sm sm:text-base">
           The road to "US" starts from here
         </Label>

@@ -66,7 +66,7 @@ export const signInGoogle = async (req, res, next) => {
     const validUser = await User.findOne({ email });
     if (validUser) {
       const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET, {
-        expiresIn: 5,
+        expiresIn: 3600,
       });
       const { password: passwordFromUser, ...restOfUser } = validUser._doc;
       res
@@ -98,7 +98,7 @@ export const signInGoogle = async (req, res, next) => {
       await newUser.save();
 
       const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-        expiresIn: "5s",
+        expiresIn: 3600,
       });
       const { password: passwordFromUser, ...restOfUser } = newUser._doc;
       res
@@ -129,7 +129,6 @@ export const check_token = async (req, res, next) => {
   }
 };
 
-
 export const sendResetPasswordOTP = async (req, res, next) => {
   try {
     const { username } = req.body;
@@ -138,97 +137,119 @@ export const sendResetPasswordOTP = async (req, res, next) => {
       next(errorHandler(404, "User not found"));
       return;
     } else {
-      const userOtp = await Token.findOne({userId: validUser._id});
-      if(userOtp){
+      const userOtp = await Token.findOne({ userId: validUser._id });
+      if (userOtp) {
         await Token.findByIdAndDelete(userOtp._id);
       }
       const otp = Math.floor(1000 + Math.random() * 900000);
-      const reset_password_token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET, {
-        expiresIn: 120,
-      });
+      const reset_password_token = jwt.sign(
+        { id: validUser._id },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: 120,
+        }
+      );
       console.log(otp);
       console.log(reset_password_token);
       // send otp to user email
-      
-      const newToken =  new Token({userId: validUser._id, otp, token: reset_password_token});
+
+      const newToken = new Token({
+        userId: validUser._id,
+        otp,
+        token: reset_password_token,
+      });
       await newToken.save();
       console.log(newToken);
-      
+
       const transporter = nodemailer.createTransport({
         service: "Gmail ",
         auth: {
           user: process.env.EMAIL,
           pass: process.env.PASSWORD,
         },
-        });
-        const mailOptions = {
-          from: process.env.EMAIL,
-          to: validUser._doc.email,
-          subject: "Password Reset OTP",
-          text: `Your OTP to reset password the is ${otp}`,
-        };
-        
-        transporter.sendMail(mailOptions, async function (error, info) {
-          if (error) {
-            console.log(error);
-            next(errorHandler(500, "Failed to send OTP"));
-          } else {
-            console.log("Email sent: " + info.response);
-            res
-            .cookie("reset_password_token",reset_password_token,{expiresIn: 120})
-            .status(200).json("OTP has been sent to your email");
-          }
-        });
+      });
+      const mailOptions = {
+        from: process.env.EMAIL,
+        to: validUser._doc.email,
+        subject: "Password Reset OTP",
+        text: `Your OTP to reset password the is ${otp}`,
+      };
+
+      transporter.sendMail(mailOptions, async function (error, info) {
+        if (error) {
+          console.log(error);
+          next(errorHandler(500, "Failed to send OTP"));
+        } else {
+          console.log("Email sent: " + info.response);
+          res
+            .cookie("reset_password_token", reset_password_token, {
+              httpOnly: true,
+              expiresIn: 120,
+            })
+            .status(200)
+            .json("OTP has been sent to your email");
+        }
+      });
     }
   } catch (error) {
     next(error);
   }
-}
-
+};
 
 export const verifyResetPasswordOTP = async (req, res, next) => {
   try {
     const { otp } = req.body;
     const userId = req.user.id;
-    const validUser = await User
-      .findOne({ _id: userId });
+    const validUser = await User.findOne({ _id: userId });
     if (!validUser) {
       next(errorHandler(404, "User not found"));
       return;
     } else {
       console.log(validUser._id);
       console.log(otp);
-      const userOtp = await Token.findOne({userId: validUser._id, otp: otp});
-      if(!userOtp){
+      const userOtp = await Token.findOne({ userId: validUser._id, otp: otp });
+      if (!userOtp) {
         next(errorHandler(404, "OTP is invalid or expired"));
         return;
       }
-        const  confirm_password_token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET, {
+      const confirm_password_token = jwt.sign(
+        { id: validUser._id },
+        process.env.JWT_SECRET,
+        {
           expiresIn: 300,
-        });
-        await Token.findOneAndUpdate({userId: validUser._id},{token:confirm_password_token});
-        res.cookie("reset_password_token", confirm_password_token, {expiresIn: 300}).status(200).json("OTP is verified");
+        }
+      );
+      await Token.findOneAndUpdate(
+        { userId: validUser._id },
+        { token: confirm_password_token }
+      );
+      res
+        .cookie("reset_password_token", confirm_password_token, {
+          httpOnly: true,
+          expiresIn: 300,
+        })
+        .status(200)
+        .json("OTP is verified");
     }
   } catch (error) {
-    next(errorHandler(500, error.message  || "Failed to verify OTP") );
-  }   
-}
+    next(errorHandler(500, error.message || "Failed to verify OTP"));
+  }
+};
 
 export const resetPassword = async (req, res, next) => {
   try {
     const { password } = req.body;
     const userId = req.user.id;
-    const validUser = await User
-      .findOne({ _id: userId });
+    const validUser = await User.findOne({ _id: userId });
     if (!validUser) {
       next(errorHandler(404, "User not found"));
       return;
     } else {
       const hashedPassword = bcryptjs.hashSync(password, 15);
-      await User.findByIdAndUpdate(userId, {password: hashedPassword});
+      await User.findByIdAndUpdate(userId, { password: hashedPassword });
       res.status(200).json("Password has been reset successfully");
     }
   } catch (error) {
-    next(errorHandler(500, error.message  || "Failed to reset password")) ;
-  }   
-}
+    next(errorHandler(500, error.message || "Failed to reset password"));
+  }
+};

@@ -4,20 +4,9 @@ import { Button } from "../components/shadcn/components/ui/button.jsx";
 import { useNavigate } from "react-router-dom";
 import { Separator } from "../components/shadcn/components/ui/separator.jsx";
 import {
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-  AccordionContent,
-} from "../components/shadcn/components/ui/accordion.jsx";
-import { ASSETS_ENUM, PROFESSION_ENUM } from "../../config/enums.config.js";
-import { Checkbox } from "../components/shadcn/components/ui/checkbox.jsx";
-import DataTable from "../components/shadcn/components/ui/data-table.jsx";
-import {
   ScrollArea,
   ScrollBar,
 } from "../components/shadcn/components/ui/scroll-area.jsx";
-import { Card } from "../components/shadcn/components/ui/card.jsx";
-import { FaEdit } from "react-icons/fa";
 
 import {
   Dialog,
@@ -28,57 +17,30 @@ import {
   DialogDescription,
   DialogFooter,
 } from "../components/shadcn/components/ui/dialog.jsx";
-import { Input } from "../components/shadcn/components/ui/input.jsx";
-import { Label } from "../components/shadcn/components/ui/label.jsx";
-import CreateProfile from "./CreateProfile.jsx";
+import CreateProfile from "../components/profile/CreateProfile.jsx";
+import MyPagination from "../components/core/MyPagination.jsx";
+import ProfileListCard from "../components/profile/profileListCard.jsx";
+import ProfileListFilters from "../components/profile/ProfileListFilters.jsx";
+import EditViewProfile from "../components/profile/EditViewProfile.jsx";
 
 export default function PorfilesList() {
   const [profiles, setProfiles] = useState([]);
   const [profilesLoading, setProfilesLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [recordsPerPage] = useState(6);
+  const indexOfLastRecord = currentPage * recordsPerPage;
+  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+  const currentRecords = profiles.slice(indexOfFirstRecord, indexOfLastRecord);
+
   const [filters, setFilters] = useState({
-    profession: [],
+    professions: [],
     assets: [],
-    education: [],
+    educations: [],
     maritalStatus: [],
-    income: [],
+    incomes: [],
   });
   const navigate = useNavigate();
-
-  const handleChange = (e) => {
-    switch (e.target.id) {
-      case "car":
-      case "house":
-      case "land":
-      case "other":
-        let assets = filters.assets;
-        if (!assets.includes(e.target.id)) {
-          assets.push(e.target.id);
-        } else {
-          assets = assets.filter((asset) => asset != e.target.id);
-        }
-        setFilters({ ...filters, assets: assets });
-        return;
-      case "feet":
-        setFilters({
-          ...filters,
-          height: { inches: filters.height.inches, feet: e.target.value },
-        });
-        return;
-      case "inches":
-        setFilters({
-          ...filters,
-          height: { feet: filters.height.feet, inches: e.target.value },
-        });
-        return;
-      case "female":
-      case "male":
-        setFilters({ ...filters, gender: e.target.id });
-        return;
-      default:
-        setFilters({ ...filters, [e.target.id]: e.target.value });
-    }
-  };
 
   useEffect(() => {
     const fetchProfiles = async () => {
@@ -100,7 +62,17 @@ export default function PorfilesList() {
         }
 
         console.log(data);
-        setProfiles(data);
+        setProfiles([
+          ...data,
+          ...data,
+          ...data,
+          ...data,
+          ...data,
+          ...data,
+          ...data,
+          ...data,
+          ...data,
+        ]);
         setProfilesLoading(false);
       } catch (err) {
         console.log(err);
@@ -111,14 +83,14 @@ export default function PorfilesList() {
   }, []);
 
   return (
-    <div className="flex items-center justify-center border-2 opacity-90">
-      <section className="flex z-30 flex-row justify-center m-4 h-lvh  flex-grow">
-        <div className="overflow-hidden rounded-[0.5rem] border bg-background shadow-md md:shadow-xl opacity-90 sm:min-w-full ">
-          <div className="flex flex-col">
+    <div className="flex items-center  justify-center opacity-95  min-w-full">
+      <section className="flex-grow z-30 m-4 min-h-screen">
+        <div className="rounded-[0.5rem] p-4 border bg-neutral-100/[0.3] dark:bg-zinc-700/[0.3] shadow-md min-w-full md:shadow-xl">
+          <div className="flex flex-col gap-2">
             <div className="flex flex-row justify-end m-2">
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button variant="secondary">Create Profile</Button>
+                  <Button variant="default">Create Profile</Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-4xl max-h-screen">
                   <DialogHeader>
@@ -137,73 +109,18 @@ export default function PorfilesList() {
             </div>
             <Separator />
 
-            <div className="grid grid-cols-1  md:grid-cols-4 gap-6">
-              <section>
-                <div className="flex flex-col p-4 m-2 sm:max-w-2xl rounded-lg shadow-xl">
-                  <Accordion type="single" collapsible className="w-full">
-                    <AccordionItem value="filters">
-                      <AccordionTrigger>Filters</AccordionTrigger>
-                      <AccordionContent>
-                        <Accordion type="single" collapsible className="w-full">
-                          <AccordionItem value="profession">
-                            <AccordionTrigger>Profession</AccordionTrigger>
-                            <AccordionContent>
-                              <div className="flex flex-row flex-wrap justify-start m-2">
-                                {PROFESSION_ENUM.map((profession) => {
-                                  return (
-                                    <div className="flex items-center mx-4 ">
-                                      <Checkbox
-                                        id={profession}
-                                        onChange={handleChange}
-                                        checked={filters.profession.includes(
-                                          profession
-                                        )}
-                                      />
-                                      <label
-                                        htmlFor={profession}
-                                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed p-2 peer-disabled:opacity-70"
-                                      >
-                                        {profession}
-                                      </label>
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                            </AccordionContent>
-                          </AccordionItem>
-                          <AccordionItem value="assets">
-                            <AccordionTrigger>Assets</AccordionTrigger>
-                            <AccordionContent>
-                              <div className="flex flex-row flex-wrap justify-start m-2">
-                                {ASSETS_ENUM.map((asset) => {
-                                  return (
-                                    <div className="flex items-center mx-4 ">
-                                      <Checkbox
-                                        id={asset}
-                                        onChange={handleChange}
-                                        checked={filters.assets.includes(asset)}
-                                      />
-                                      <label
-                                        htmlFor={asset}
-                                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed p-2 peer-disabled:opacity-70"
-                                      >
-                                        {asset}
-                                      </label>
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                            </AccordionContent>
-                          </AccordionItem>
-                        </Accordion>
-                      </AccordionContent>
-                    </AccordionItem>
-                  </Accordion>
+            <div className="grid grid-cols-1  md:grid-cols-4 gap-2">
+              <section className="sm:border-2 sm:border-r-primary p-4">
+                <div className="flex flex-col m-1 p-2 col-span-1 w-full bg-background  rounded-lg shadow-xl">
+                  <ProfileListFilters
+                    filters={filters}
+                    setFilters={setFilters}
+                  />
                 </div>
               </section>
-              <section className="sm:col-span-2 md:col-span-3 items-start">
-                <ScrollArea className="rounded-md border max-h-dvh overflow-scroll">
-                  <div className="grid grid-cols-1 xl:grid-cols-2 m-4 ">
+              <section className="flex flex-col sm:col-span-2 md:col-span-3 w-full items-center gap-2">
+                <ScrollArea className="rounded-md max-h-[70vh] sm:max-h-[70vh]  w-full overflow-scroll">
+                  <div className="grid grid-cols-1 xl:grid-cols-2 m-2 ">
                     {profilesLoading && (
                       <div className="flex flex-col fle-grow m-2 sm:max-w-2xl  rounded-lg shadow-xl">
                         {[...Array(6).keys()].map((_, i) => (
@@ -211,76 +128,36 @@ export default function PorfilesList() {
                         ))}
                       </div>
                     )}
-                    {[...profiles, ...profiles, ...profiles].map((profile) => (
-                      <Card className="col-span-1 rounded-lg shadow-xl m-4 hover:scale-105 hover:shadow-md hover:shadow-primary-foreground opacity-100">
-                        <div
-                          key={profile._id}
-                          className="flex flex-row  rounded-lg justify-between items-center"
-                        >
-                          {/* <Card className=""> */}
-                          <img
-                            src={profile.profilePictures[0]}
-                            alt="profile"
-                            className="w-1/3 h-[150px] rounded-lg object-cover border-4 border-primary-foreground "
-                          />
-                          {/* </Card> */}
-                          <div className="flex flex-col items-center justify-between p-2 m-2 w-2/3 gap-2">
-                            <div className="flex flex-row items-center justify-between w-full">
-                              <p className="text-lg font-bold text-yellow-600">
-                                {profile.firstName + " " + profile.lastName}
-                              </p>
-                              <p className="text-lg font-bold">
-                                <FaEdit />
-                              </p>
-                            </div>
-                            <div className="flex flex-row items-center justify-between w-full">
-                              <p className="text-sm font-medium leading-none">
-                                {profile.age} years
-                              </p>
-                            </div>
-                            <Separator />
-                            <div className="flex flex-row items-center justify-between w-full">
-                              <div className="flex flex-col space-y-1 items-start">
-                                <p className="text-sm text-muted-foreground">
-                                  {"Profession"}
-                                </p>
-                                <p className="text-sm font-medium leading-none">
-                                  {profile.profession.toUpperCase()}
-                                </p>
-                              </div>
-                              <div className="flex flex-col space-y-1 items-end">
-                                <p className="text-sm text-muted-foreground">
-                                  {"Education"}
-                                </p>
-                                <p className="text-sm font-medium leading-none">
-                                  {profile.education.toUpperCase()}
-                                </p>
-                              </div>
-                            </div>
-                            <div className="flex flex-row items-center justify-between w-full">
-                              <div className="flex flex-col space-y-1 items-start">
-                                <p className="text-sm text-muted-foreground">
-                                  {"Marital Status"}
-                                </p>
-                                <p className="text-sm font-medium leading-none">
-                                  {profile.maritalStatus.toUpperCase()}
-                                </p>
-                              </div>
-                              <div className="flex flex-col space-y-1 items-end">
-                                <p className="text-sm text-muted-foreground">
-                                  {"Income"}
-                                </p>
-                                <p className="text-sm font-medium leading-none">
-                                  {profile.income.toUpperCase()}
-                                </p>
-                              </div>
-                            </div>
+                    {currentRecords.map((profile) => (
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <div>
+                            <ProfileListCard profile={profile} />
                           </div>
-                        </div>
-                      </Card>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-4xl max-h-screen">
+                          <DialogHeader>
+                            <DialogTitle>Profile</DialogTitle>
+                          </DialogHeader>
+
+                          <ScrollArea className="rounded-md border max-h-lvh overflow-scroll">
+                            <EditViewProfile profile={profile} />
+                            <ScrollBar orientation="horizontal" />
+                          </ScrollArea>
+                        </DialogContent>
+                      </Dialog>
                     ))}
                   </div>
                 </ScrollArea>
+                <section className="w-full flex felx-row justify-end">
+
+                  <MyPagination
+                    setCurrentPage={setCurrentPage}
+                    currentPage={currentPage}
+                    profiles={profiles}
+                    recordsPerPage={recordsPerPage}
+                  />
+                </section>
               </section>
             </div>
           </div>
