@@ -12,6 +12,7 @@ import PorfilesList from "./pages/PorfilesList";
 import MyFooter from "./components/Footer";
 import { CookiesProvider } from 'react-cookie';
 import ForgotPassword from "./pages/ForgotPassword";
+import EditViewProfile from "./pages/EditViewProfile";
 
 export default function App() {
   return (
@@ -48,6 +49,8 @@ export default function App() {
               <Route path="/" element={<Home />} />
               <Route path="/home" element={<Home />} />
               <Route path="/profile" element={<UserProfile />} />
+              <Route path="/profile/:id" element={<EditViewProfile />} />
+              <Route path="/createProfile" element={<CreateProfile />} />
               <Route path="/viewProfiles" element={<PorfilesList />}></Route>
             </Route>
           </Routes>

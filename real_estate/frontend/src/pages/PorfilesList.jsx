@@ -21,7 +21,7 @@ import CreateProfile from "../components/profile/CreateProfile.jsx";
 import MyPagination from "../components/core/MyPagination.jsx";
 import ProfileListCard from "../components/profile/profileListCard.jsx";
 import ProfileListFilters from "../components/profile/ProfileListFilters.jsx";
-import EditViewProfile from "../components/profile/EditViewProfile.jsx";
+import EditViewProfile from "./EditViewProfile.jsx";
 
 export default function PorfilesList() {
   const [profiles, setProfiles] = useState([]);
@@ -129,23 +129,9 @@ export default function PorfilesList() {
                       </div>
                     )}
                     {currentRecords.map((profile) => (
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <div>
+                      
                             <ProfileListCard profile={profile} />
-                          </div>
-                        </DialogTrigger>
-                        <DialogContent className="sm:max-w-4xl max-h-screen">
-                          <DialogHeader>
-                            <DialogTitle>Profile</DialogTitle>
-                          </DialogHeader>
-
-                          <ScrollArea className="rounded-md border max-h-lvh overflow-scroll">
-                            <EditViewProfile profile={profile} />
-                            <ScrollBar orientation="horizontal" />
-                          </ScrollArea>
-                        </DialogContent>
-                      </Dialog>
+                        
                     ))}
                   </div>
                 </ScrollArea>
