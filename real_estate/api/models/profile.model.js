@@ -33,11 +33,19 @@ const profileSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
+      match: [
+        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+        "Please enter a valid email",
+      ],
     },
     phoneNumber: {
-      type: Number,
+      type: String,
       required: true,
       unique: true,
+      match: [
+        /^(\+\d{1,3}[- ]?)?\d{10}$/,
+        "Please enter a valid phone number",
+      ],
     },
     gender: {
       type: String,
