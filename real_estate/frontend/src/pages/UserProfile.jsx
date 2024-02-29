@@ -20,6 +20,14 @@ import {
   signOutSuccess,
   signOutFailure,
 } from "../redux/user/userSlice.js";
+import { Card } from "../components/shadcn/components/ui/card.jsx";
+import { Input } from "../components/shadcn/components/ui/input.jsx";
+import { Button } from "../components/shadcn/components/ui/button.jsx";
+import { FaEdit , FaTimes} from "react-icons/fa";
+
+
+
+
 
 export default function UserProfile() {
   const fileRef = useRef(null);
@@ -33,6 +41,7 @@ export default function UserProfile() {
   const [fileUploadError, setFileUploadError] = useState(false);
   const [formData, setFormData] = useState({});
   const [updateSuccess, setUpdateSuccess] = useState(false);
+  const [editPic, setEditPic] = useState(false);
 
   useEffect(() => {
     if (file) {
@@ -61,10 +70,10 @@ export default function UserProfile() {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setFormData({ ...formData, avatar: downloadURL });
         });
+        setEditPic(false);
       }
     );
   };
-  console.log(formData);
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -128,25 +137,33 @@ export default function UserProfile() {
   };
 
   return (
-    <>
+    <div className="flex flex-row max-w-lg mx-auto justify-center">
       {currentUser && currentUser._id ? (
-        <div className="max-w-lg mx-auto">
+        <Card className="w-lg m-4 flex-grow">
           <h1 className="text-center text-4xl font-bold m-10">My Account</h1>
-          <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
+          <form className="flex flex-col items-center gap-5 p-4" onSubmit={handleSubmit}>
+            <div className="flex flex-row justify-center items-start">
+              <img
+                src={formData.avatar || currentUser.avatar}
+                alt="profile_pic"
+                className="rounded-full h-24 w-24 object-cover cursor-pointer self-center m-2"
+              />
+              <div className="flex flex-col items-start" >
+                {editPic ? 
+                  (<FaTimes className="text-2xl cursor-pointer" onClick={() => setEditPic(!editPic)}/>):
+                (<FaEdit
+                  className="text-2xl cursor-pointer"
+                  
+                  onClick={() => setEditPic(!editPic)}
+                />)}
+              </div>
+            </div>
             <input
               type="file"
-              ref={fileRef}
-              className="border p-2 rounded-lg"
-              hidden
+              className="p-2"
+              hidden={!editPic}
               accept="image/*"
               onChange={handleFile}
-            ></input>
-
-            <img
-              onClick={() => fileRef.current.click()}
-              src={formData.avatar || currentUser.avatar}
-              alt="profile_pic"
-              className="rounded-full h-24 w-24 object-cover cursor-pointer self-center m-2"
             />
             {fileUploadError ? (
               <span className="text-center block text-red-400">
@@ -161,44 +178,41 @@ export default function UserProfile() {
                 {"Upload is complete"}
               </span>
             ) : null}
-            <input
+            <Input
               type="text"
               placeholder="username"
               defaultValue={currentUser.username}
-              className="border p-2 rounded-lg "
+              className="p-2"
               id="username"
               disabled
-            ></input>
-            <input
+            />
+            <Input
               type="email"
               placeholder="email"
               defaultValue={currentUser.email}
-              className="border p-2 rounded-lg "
+              className="p-2"
               id="email"
               onChange={handleChange}
-            ></input>
-            <input
+            />
+            <Input
               type="password"
               placeholder={"change password"}
-              className="border p-2 rounded-lg "
+              className="p-2"
               id="password"
               onChange={handleChange}
-            ></input>
-            <button
-              disabled={isSubmitting}
-              className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-90 disabled:opacity-15"
-            >
+            />
+            <Button disabled={isSubmitting} className="m-4 w-full">
               {isSubmitting ? "Updating" : "Update"}
-            </button>
+            </Button>
           </form>
-          <div className="flex justify-center mt-5">
+          {/* <div className="flex justify-center mt-5">
             <span
               className="text-center block text-blue-400 cursor-pointer hover:underline"
               onClick={handleDeleteUser}
             >
               Delete Account
             </span>
-          </div>
+          </div> */}
           {error && (
             <span className="text-red-500 text-center block">
               Error: {error}
@@ -209,8 +223,8 @@ export default function UserProfile() {
               Profile updated successfully
             </span>
           )}
-        </div>
+        </Card>
       ) : null}
-    </>
+    </div>
   );
 }
