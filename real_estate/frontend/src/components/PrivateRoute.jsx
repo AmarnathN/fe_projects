@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
 import { validateToken } from "../redux/user/userSlice";
 import { FaSpinner } from "react-icons/fa";
+import CardPlaceHolder from "./core/placeholders/card.placeholder";
 
 export default function PrivateRoute() {
   const { currentUser, isSubmitting, isAuthenticated } = useSelector(
@@ -16,8 +17,8 @@ export default function PrivateRoute() {
 
   if (isSubmitting)
     return (
-      <div className="flex flex-row justify-center m-10 p-10">
-        <FaSpinner size={10}/>
+      <div className="flex mx-auto flex-row justify-center m-10 p-10 w-[50vw] h-[50vh]">
+        <CardPlaceHolder />
       </div>
     );
 

@@ -19,7 +19,7 @@ import {
 } from "../components/shadcn/components/ui/dialog.jsx";
 import CreateProfile from "../components/profile/CreateProfile.jsx";
 import MyPagination from "../components/core/MyPagination.jsx";
-import ProfileListCard from "../components/profile/profileListCard.jsx";
+import ProfileListCard from "../components/profile/ProfileListCard.jsx";
 import ProfileListFilters from "../components/profile/ProfileListFilters.jsx";
 import EditViewProfile from "./EditViewProfile.jsx";
 
@@ -34,13 +34,44 @@ export default function PorfilesList() {
   const currentRecords = profiles.slice(indexOfFirstRecord, indexOfLastRecord);
 
   const [filters, setFilters] = useState({
-    professions: [],
+    profession: [],
     assets: [],
-    educations: [],
+    education: [],
     maritalStatus: [],
-    incomes: [],
+    income: [],
   });
   const navigate = useNavigate();
+
+  const handleFilterApply = async (e) => {
+    try{
+      let queryString = ""
+      Object.keys(filters).forEach((key) => {
+        if (filters[key].length > 0) {
+          queryString = queryString + "&" + `${key}=${JSON.stringify(filters[key])}`;
+        }
+      }
+      );
+
+      console.log(queryString);
+      const res = await fetch(`/api/profile/get_profiles?${queryString}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      if (data.success === false && data.statusCode === 403) {
+        setError(data.message);
+        navigate("/sign-in");
+        return;
+      }else if (data.success === false) {
+        setError(data.message);
+      }
+      setProfiles(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
     const fetchProfiles = async () => {
@@ -115,6 +146,7 @@ export default function PorfilesList() {
                   <ProfileListFilters
                     filters={filters}
                     setFilters={setFilters}
+                    handleFilterApply={handleFilterApply}
                   />
                 </div>
               </section>

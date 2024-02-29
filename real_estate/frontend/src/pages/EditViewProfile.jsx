@@ -264,12 +264,12 @@ export default function EditViewProfile({ props }) {
 
   return (
     <div className="flex justify-center mx-auto items-center">
-      <Card className="m-4 p-3 w-[90vw] gap-2 bg-background opacity-95">
+      <Card className="m-4 w-[90vw] bg-background opacity-95 border-0 shadow-xl dark:shadow-inner">
         <Form
           className="flex flex-col mx-auto p-3 max-w-6xl items-center gap-2"
           {...form}
         >
-          <div className="flex flex-row justify-center m-4 p-4 gap-2 w-full">
+          <div className="flex flex-row justify-center p-4 gap-2 w-full">
             <Swiper
               modules={[
                 Navigation,
@@ -281,7 +281,9 @@ export default function EditViewProfile({ props }) {
               spaceBetween={20}
               slidesPerView={1}
               effect="fade"
-              autoplay={{ delay: 2500, disableOnInteraction: false }}
+              autoplay={{ 
+                delay: 1500,
+              }}
               navigation
               pagination={{ clickable: true }}
               scrollbar={{ draggable: true }}
@@ -295,7 +297,7 @@ export default function EditViewProfile({ props }) {
                     <img
                       src={picture}
                       alt="profile"
-                      className="w-[50vw] h-[50vh] rounded-lg border-2"
+                      className="w-[50vw] sm:h-[50vh] rounded-lg object-cover p-3"
                     />
                   </SwiperSlide>
                 );
@@ -687,7 +689,7 @@ export default function EditViewProfile({ props }) {
                           defaultValue={formData.bio}
                           id="bio"
                           onChange={handleChange}
-                          className="resize-y h-[20vh]"
+                          className="resize-y h-[30vh]"
                           disabled={!enableEdit}
                         />
                       </FormControl>
