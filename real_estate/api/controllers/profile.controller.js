@@ -16,73 +16,97 @@ export const createProfile = async (req, res, next) => {
   }
 };
 
+export const searchProfiles = async (req, res, next) => {
+  try {
+    const searchParam = req.query.searchParam;
+    console.log(req.query);
+    let profiles;
+    if (searchParam.length < 1 || searchParam === undefined) {
+      profiles = await Profile.find({}).sort({ createdAt: -1 });
+    } else {
+      profiles = await Profile.find({
+        $or: [
+          { firstName: { $regex: searchParam, $options: "i" } },
+          { lastName: { $regex: searchParam, $options: "i" } },
+          { email: { $regex: searchParam, $options: "i" } },
+          { phoneNumber: { $regex: searchParam, $options: "i" } },
+        ],
+      }).sort({ createdAt: -1 });
+    }
+    res.status(200).json(profiles);
+  } catch (err) {
+    console.log(err);
+    next(errorHandler(500, err.message || "Failed to search profiles"));
+  }
+};
+
 export const getProfiles = async (req, res, next) => {
   try {
     let match = {};
     const filters = req.body.filters;
     console.log(filters);
-     
-    if(req.query.age_gte) {
+
+    if (req.query.age_gte) {
       match.age = {
         $gte: parseInt(req.query.age_gte),
       };
     }
-    if(req.query.age_lte) {
+    if (req.query.age_lte) {
       match.age = {
         $lte: parseInt(req.query.age_lte),
       };
     }
-    if(req.query.assets) {
+    if (req.query.assets) {
       match.assets = {
         $all: JSON.parse(req.query.assets),
       };
     }
-    if(req.query.createdAt) {
+    if (req.query.createdAt) {
       match.createdAt = {
         $gte: new Date(req.query.createdAt),
       };
     }
-    if(req.query.createdAt) {
+    if (req.query.createdAt) {
       match.createdAt = {
         $lte: new Date(req.query.createdAt),
       };
     }
-    if(req.query.profession) {
+    if (req.query.profession) {
       match.profession = {
         $in: JSON.parse(req.query.profession),
       };
     }
-    if(req.query.education) {
+    if (req.query.education) {
       match.education = {
         $in: JSON.parse(req.query.education),
       };
     }
-    if(req.query.maritalStatus) {
+    if (req.query.maritalStatus) {
       match.maritalStatus = {
         $in: JSON.parse(req.query.maritalStatus),
       };
     }
-    if(req.query.religion) {
+    if (req.query.religion) {
       match.religion = {
         $in: JSON.parse(req.query.religion),
       };
     }
-    if(req.query.caste) {
+    if (req.query.caste) {
       match.caste = {
         $in: JSON.parse(req.query.caste),
       };
     }
-    if(req.query.state) {
+    if (req.query.state) {
       match.state = {
         $in: JSON.parse(req.query.state),
       };
     }
-    if(req.query.city) {
+    if (req.query.city) {
       match.city = {
         $in: JSON.parse(req.query.city),
       };
     }
-    if(req.query.country) {
+    if (req.query.country) {
       match.country = {
         $in: JSON.parse(req.query.country),
       };

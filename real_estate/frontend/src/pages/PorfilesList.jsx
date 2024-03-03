@@ -17,11 +17,12 @@ import {
   DialogDescription,
   DialogFooter,
 } from "../components/shadcn/components/ui/dialog.jsx";
-import CreateProfile from "../components/profile/CreateProfile.jsx";
+import CreateProfile from "../components/profile/CreateEditProfile.jsx";
 import MyPagination from "../components/core/MyPagination.jsx";
 import ProfileListCard from "../components/profile/ProfileListCard.jsx";
 import ProfileListFilters from "../components/profile/ProfileListFilters.jsx";
 import EditViewProfile from "./EditViewProfile.jsx";
+import { Input } from "../components/shadcn/components/ui/input.jsx";
 
 export default function PorfilesList() {
   const [profiles, setProfiles] = useState([]);
@@ -43,14 +44,14 @@ export default function PorfilesList() {
   const navigate = useNavigate();
 
   const handleFilterApply = async (e) => {
-    try{
-      let queryString = ""
+    try {
+      let queryString = "";
       Object.keys(filters).forEach((key) => {
         if (filters[key].length > 0) {
-          queryString = queryString + "&" + `${key}=${JSON.stringify(filters[key])}`;
+          queryString =
+            queryString + "&" + `${key}=${JSON.stringify(filters[key])}`;
         }
-      }
-      );
+      });
 
       console.log(queryString);
       const res = await fetch(`/api/profile/get_profiles?${queryString}`, {
@@ -64,7 +65,7 @@ export default function PorfilesList() {
         setError(data.message);
         navigate("/sign-in");
         return;
-      }else if (data.success === false) {
+      } else if (data.success === false) {
         setError(data.message);
       }
       setProfiles(data);
@@ -72,6 +73,28 @@ export default function PorfilesList() {
       console.log(err);
     }
   };
+
+  const handleSearch = async (e) => {
+    try {
+      const res = await fetch(`/api/profile/search/?searchParam=${e.target.value}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      if (data.success === false && data.statusCode === 403) {
+        setError(data.message);
+        navigate("/sign-in");
+        return;
+      } else if (data.success === false) {
+        setError(data.message);
+      }
+      setProfiles(data);
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   useEffect(() => {
     const fetchProfiles = async () => {
@@ -119,6 +142,13 @@ export default function PorfilesList() {
         <div className="rounded-[0.5rem] p-4 border bg-neutral-100/[0.3] dark:bg-zinc-700/[0.3] shadow-md min-w-full md:shadow-xl">
           <div className="flex flex-col gap-2">
             <div className="flex flex-row justify-end m-2">
+              <Input
+                type="search"
+                placeholder={`Search profiles by name, email, phone number ...`}
+                className="rounded-md max-w-sm border-primary mx-2"
+                onChange={handleSearch}
+                
+              />
               <Dialog>
                 <DialogTrigger asChild>
                   <Button variant="default">Create Profile</Button>
@@ -161,14 +191,11 @@ export default function PorfilesList() {
                       </div>
                     )}
                     {currentRecords.map((profile) => (
-                      
-                            <ProfileListCard profile={profile} />
-                        
+                      <ProfileListCard profile={profile} />
                     ))}
                   </div>
                 </ScrollArea>
                 <section className="w-full flex felx-row justify-end">
-
                   <MyPagination
                     setCurrentPage={setCurrentPage}
                     currentPage={currentPage}

@@ -6,6 +6,8 @@ import {
   INCOME_ENUM,
   MARITAL_STATUS_ENUM,
   PROFESSION_ENUM,
+  RELIGION_ENUM,
+  CASTE_ENUM,
 } from "../config/enums.config.js";
 
 const heightSchema = new mongoose.Schema({
@@ -32,7 +34,6 @@ const profileSchema = new mongoose.Schema(
     email: {
       type: String,
       required: true,
-      unique: true,
       match: [
         /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
         "Please enter a valid email",
@@ -41,22 +42,28 @@ const profileSchema = new mongoose.Schema(
     phoneNumber: {
       type: String,
       required: true,
-      unique: true,
-      match: [
-        /^(\+\d{1,3}[- ]?)?\d{10}$/,
-        "Please enter a valid phone number",
-      ],
+      match: [/^(\+\d{1,3}[- ]?)?\d{10}$/, "Please enter a valid phone number"],
     },
     gender: {
       type: String,
       required: true,
       enum: GENDER_ENUM,
     },
-    age: {
-      type: Number,
+    religion: {
+      type: String,
       required: true,
+      enum: RELIGION_ENUM,
     },
-    dob:{
+    caste: {
+      type: String,
+      required: true,
+      enum: Object.keys(CASTE_ENUM).forEach((caste) => {
+        return CASTE_ENUM[caste].forEach((subCaste) => {
+          return caste + ":" + subCaste;
+        });
+      }),
+    },
+    dob: {
       type: Date,
       required: true,
     },
@@ -82,7 +89,7 @@ const profileSchema = new mongoose.Schema(
     income: {
       type: String,
       required: true,
-      enum: INCOME_ENUM
+      enum: INCOME_ENUM,
     },
     assets: [
       {
@@ -94,10 +101,15 @@ const profileSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    profilePictures:[ {
-      type: String,
-      required: true,
-    }],
+    profilePictures: {
+      type: [
+        {
+          type: String,
+          required: true,
+        },
+      ],
+      validate: [v => Array.isArray(v) && v.length > 0 , "atleast one profile picture is required"]
+    },
     userRef: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -107,6 +119,8 @@ const profileSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+profileSchema.index({ email: "text", phoneNumber: "text" }, { unique: true });
 
 const Profile = mongoose.model("Profile", profileSchema);
 

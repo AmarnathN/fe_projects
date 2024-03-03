@@ -70,34 +70,17 @@ import {
 import "swiper/css";
 
 import "swiper/css/bundle";
+import CreateEditProfile from "../components/profile/CreateEditProfile";
 
 export default function EditViewProfile({ props }) {
   const { id } = useParams();
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    gender: "",
-    phoneNumber: "",
-    dob: "",
-    age: "",
-    bio: "",
-    profilePictures: [],
-    profession: "",
-    assets: [],
-    maritalStatus: "",
-    education: "",
-    income: "",
-    height: {
-      feet: "",
-      inches: "",
-    },
-  });
+  const [formData, setFormData] = useState({});
   const [enableEdit, setEnableEdit] = useState(false);
   const [imageFiles, setImageFiles] = useState();
   const [profileUploading, setProfileUploading] = useState(false);
   const [profileUploadError, setProfileUploadError] = useState("");
   const navigate = useNavigate();
+  const nullString = "N/A";
 
   const formSchema = z.object({});
 
@@ -108,7 +91,6 @@ export default function EditViewProfile({ props }) {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        console.log(props);
         const res = await fetch(`/api/profile/get/${id}`, {
           method: "GET",
           headers: {
@@ -116,7 +98,6 @@ export default function EditViewProfile({ props }) {
           },
         });
         const data = await res.json();
-        console.log(data);
         if (data.success === false) {
           setProfileUploadError(data.message);
           return;
@@ -127,7 +108,7 @@ export default function EditViewProfile({ props }) {
       }
     };
     fetchProfile();
-  }, []);
+  }, [enableEdit]);
 
   const handleImageUpload = (e) => {
     let images = [];
@@ -137,6 +118,7 @@ export default function EditViewProfile({ props }) {
     setImageFiles(images);
   };
 
+  console.log(formData);
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -187,6 +169,7 @@ export default function EditViewProfile({ props }) {
       return;
     }
   };
+
   const uploadImage = async (file) => {
     return new Promise((resolve, reject) => {
       const storage = getStorage(app);
@@ -269,501 +252,221 @@ export default function EditViewProfile({ props }) {
           className="flex flex-col mx-auto p-3 max-w-6xl items-center gap-2"
           {...form}
         >
-          <div className="flex flex-row justify-center p-4 gap-2 w-full">
-            <Swiper
-              modules={[
-                Navigation,
-                Pagination,
-                Scrollbar,
-                Autoplay,
-                EffectFade,
-              ]}
-              spaceBetween={20}
-              slidesPerView={1}
-              effect="fade"
-              autoplay={{ 
-                delay: 1500,
-              }}
-              navigation
-              pagination={{ clickable: true }}
-              scrollbar={{ draggable: true }}
-              className="h-[50vh] rounded-lg shadow-xl"
-            >
-              {formData.profilePictures.map((picture, index) => {
-                return (
-                  <SwiperSlide key={`profile_pic_${index}`} 
-                  className="flex flex-row justify-center items-center w-full h-[50vh] rounded-lg shadow-xl"
-                  >
-                    <img
-                      src={picture}
-                      alt="profile"
-                      className="w-[50vw] sm:h-[50vh] rounded-lg object-cover p-3"
-                    />
-                  </SwiperSlide>
-                );
-              })}
-            </Swiper>
-          </div>
           <div className="flex flex-row justify-end m-4 gap-2">
             <Switch onCheckedChange={() => setEnableEdit(!enableEdit)} />
             <Label className="text-lg font-bold"> Edit Profile </Label>
           </div>
-          <form className="flex flex-col p-5 sm:flex-row m-5 rounded justify-between shadow-xl">
-            <div className="flex flex-col sm:w-2/3 border-r-2 p-2 ">
-              <div className="flex flex-col justify-center sm:flex-row sm:justify-between my-2">
-                <div className="flex flex-col sm:w-1/2 flex-grow mx-2">
-                  <FormField
-                    name="firstName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>First Name</FormLabel>
-                        <FormControl>
-                          <Input
-                            defaultValue={formData.firstName}
-                            id="firstName"
-                            onChange={handleChange}
-                            disabled={!enableEdit}
-                          />
-                        </FormControl>
-                        <FormDescription>{}</FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <div className="flex flex-col sm:w-1/2 flex-grow mx-2">
-                  <FormField
-                    name="lastName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Last Name</FormLabel>
-                        <FormControl>
-                          <Input
-                            defaultValue={formData.lastName}
-                            id="lastName"
-                            onChange={handleChange}
-                            disabled={!enableEdit}
-                          />
-                        </FormControl>
-                        <FormDescription>{}</FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </div>
-              <div className="flex flex-col justify-center sm:flex-row sm:justify-betwen my-2">
-                <div className="flex flex-col sm:w-1/2 flex-grow mx-2">
-                  <FormField
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Email</FormLabel>
-                        <FormControl>
-                          <Input
-                            defaultValue={formData.email}
-                            id="email"
-                            onChange={handleChange}
-                            disabled={!enableEdit}
-                          />
-                        </FormControl>
-                        <FormDescription>{}</FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <div className="flex flex-col sm:w-1/2 flex-grow mx-2">
-                  <FormField
-                    name="phonenumber"
-                    id="phonenumber"
-                    render={() => (
-                      <FormItem>
-                        <FormLabel>Phone Number</FormLabel>
-                        <FormControl>
-                          <Input
-                            defaultValue={formData.phoneNumber}
-                            id="phonenumber"
-                            onChange={handlePhoneChange}
-                            disabled={!enableEdit}
-                          />
-                        </FormControl>
-                        <FormDescription>{}</FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </div>
-              <Separator />
-              <div className="flex flex-col gap-2 sm:gap-0 sm:flex-row justify-between m-2">
-                <RadioGroup
-                  defaultValue={formData.gender}
-                  className="flex flex-row m-2 gap-2 justify-start flex-grow"
+
+          {enableEdit ? (
+            <div className="flex flex-row justify-center m-4 gap-2 border-2">
+              <CreateEditProfile
+                profile={formData}
+                enableEdit={enableEdit}
+                setEnableEdit={setEnableEdit}
+              />
+            </div>
+          ) : Object.keys(formData).length > 0 ? (
+            <>
+              <div className="flex flex-row justify-center gap-2 w-full">
+                <Swiper
+                  modules={[
+                    Navigation,
+                    Pagination,
+                    Scrollbar,
+                    Autoplay,
+                    EffectFade,
+                  ]}
+                  spaceBetween={20}
+                  slidesPerView={1}
+                  effect="fade"
+                  autoplay={{
+                    delay: 1500,
+                  }}
+                  navigation
+                  pagination={{ clickable: true }}
+                  scrollbar={{ draggable: true }}
+                  className="h-[20vh] sm:h-[50vh] rounded-lg shadow-xl"
                 >
-                  {GENDER_ENUM.map((gender) => {
+                  {formData.profilePictures.map((picture, index) => {
                     return (
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem
-                          value={gender}
-                          id={"gender"}
-                          checked={formData.gender === gender}
-                          onClick={handleChange}
-                          disabled={!enableEdit}
+                      <SwiperSlide
+                        key={`profile_pic_${index}`}
+                        className="flex flex-row justify-center items-center w-full h-[20vh] sm:h-[50vh] rounded-lg shadow-xl"
+                      >
+                        <img
+                          src={picture}
+                          className="w-[50vw] h-[20vh] sm:h-[50vh] rounded-lg object-cover m-2"
+                          onError={(e) =>
+                            (e.target.onerror = null)(
+                              (e.target.src = "/src/assets/images/no_image.png")
+                            )
+                          }
                         />
-                        <Label htmlFor={gender}>{gender}</Label>
-                      </div>
+                      </SwiperSlide>
                     );
                   })}
-                </RadioGroup>
-                <div className="flex flex-row justify-startn m-2 flex-grow">
-                  <div className="flex mx-2 flex-col gap-2">
-                    <FormField
-                      name="heightFeet"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Height (Ft)</FormLabel>
-                          <FormControl>
-                            <Slider
-                              id="heightFeet"
-                              onValueChange={handleFeetChange}
-                              defaultValue={[formData.height.feet]}
-                              max={7}
-                              step={1}
-                              min={4}
-                              className="mt-1 w-full rounded-md"
-                              disabled={!enableEdit}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <span className="text-center text-sm">
-                      {formData.height.feet} feet
-                    </span>
+                </Swiper>
+              </div>
+              <form className="flex flex-col p-5 sm:flex-row m-5 rounded justify-between shadow-xl">
+                <div className="flex flex-col sm:w-2/3 border-r-2 p-2 ">
+                  <div className="flex flex-col justify-center sm:flex-row sm:justify-between my-2">
+                    <div className="flex flex-col sm:w-1/2 flex-grow mx-2">
+                      <p className="text-xl font-bold text-primary">
+                        {formData.firstName && formData.lastName ? formData.firstName + " " + formData.lastName : nullString}
+                      </p>
+                    </div>
                   </div>
-                  <div className="flex mx-2 flex-col gap-2">
-                    <FormField
-                      name="heightInches"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Height (In)</FormLabel>
-                          <FormControl>
-                            <Slider
-                              id="heightInches"
-                              onValueChange={handleInchesChange}
-                              defaultValue={[formData.height.inches]}
-                              max={7}
-                              step={1}
-                              min={4}
-                              className="mt-1 w-full rounded-md"
-                              disabled={!enableEdit}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <p className="text-center text-sm">
-                      {formData.height.inches} inches
-                    </p>
+                  <Separator />
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full my-4">
+                    <div className="w-full flex flex-row justify-between items-end gap-2  sm:flex-col sm:gap-0 sm:space-y-1  sm:items-start ">
+                      <p className="text-2sm sm:text-sm text-muted-foreground">
+                        {"Email"}
+                      </p>
+                      <p className="text-sm sm:text-lg font-medium leading-none">
+                        {formData.email ? formData.email.toUpperCase(): nullString}
+                      </p>
+                    </div>
+                    <div className="w-full flex flex-row justify-between items-end gap-2  sm:flex-col sm:gap-0 sm:space-y-1  sm:items-start ">
+                      <p className="text-2sm sm:text-sm text-muted-foreground">
+                        {"Phone Number"}
+                      </p>
+                      <p className="text-sm sm:text-lg font-medium leading-none">
+                        {formData.phoneNumber ? formData.phoneNumber.toUpperCase(): nullString}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              </div>
-              <Separator />
-              <div className="grid grid-col-1 sm:grid-cols-3 m-2 gap-4">
-                <div className="grid grid-cols-1 gap-2 ">
-                  <FormField
-                    onChange={handleChange}
-                    name="dob"
-                    id="dob"
-                    className="w-1/3"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Date of Birth</FormLabel>
-                        <FormControl>
-                          <Popover>
-                            <PopoverTrigger asChild>
-                              <Button
-                                variant={"outline"}
-                                className={cn(
-                                  "w-full justify-start text-left font-normal",
-                                  !formData.dob && "text-muted-foreground"
-                                )}
-                                disabled={!enableEdit}
-                              >
-                                <FaCalendar className="mr-2 h-4 w-4" />
-                                {formData.dob ? (
-                                  moment(formData.dob).format("YYYY/MM/DD")
-                                ) : (
-                                  <span>Pick a date</span>
-                                )}
-                              </Button>
-                            </PopoverTrigger>
-                            <PopoverContent>
-                              <Calendar
-                                mode="single"
-                                selected={formData.dob}
-                                onSelect={handleDobChange}
-                                initialFocus
-                                {...field}
-                                disabled={!enableEdit}
-                              />
-                            </PopoverContent>
-                          </Popover>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <div className="grid grid-cols-1 gap-2 ">
-                  <FormField
-                    name="age"
-                    id="age"
-                    className="w-1/3"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Age</FormLabel>
-                        <FormControl>
-                          <Input
-                            defaultValue={formData.age}
-                            id="age"
-                            onChange={handleChange}
-                            disabled={!enableEdit}
-                          />
-                        </FormControl>
-                        <FormDescription>{}</FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <div className="grid grid-cols-1 gap-2 ">
-                  <FormField
-                    onChange={handleChange}
-                    name="education"
-                    id="education"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Education</FormLabel>
-                        <FormControl>
-                          <Select
-                            onValueChange={handleEducationChange}
-                            defaultValue={formData.education}
-                            disabled={!enableEdit}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select Education" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectGroup>
-                                {EDUCATION_ENUM.map((education) => {
-                                  return (
-                                    <SelectItem value={education}>
-                                      {education}
-                                    </SelectItem>
-                                  );
-                                })}
-                              </SelectGroup>
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-                        <FormDescription>{}</FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </div>
-              <div className="grid grid-col-1 sm:grid-cols-3 m-2 gap-4">
-                <div className="grid grid-cols-1 gap-2 ">
-                  <Label htmlFor="area">Profession</Label>
-                  <Select
-                    onValueChange={handleProfessionChange}
-                    defaultValue={formData.profession}
-                    className={cn("w-[200px] appearance-none font-normal")}
-                    disabled={!enableEdit}
-                  >
-                    <SelectTrigger>
-                      <SelectValue
-                        placeholder="Select profession"
-                        className="overflow-hidden"
-                      />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        {PROFESSION_ENUM.map((profession) => {
+                  <Separator />
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full my-4">
+                    <div className="w-full flex flex-row justify-between items-end gap-2  sm:flex-col sm:gap-0 sm:space-y-1  sm:items-start ">
+                      <p className="text-2sm sm:text-sm text-muted-foreground">
+                        {"Gender"}
+                      </p>
+                      <p className="text-sm sm:text-lg font-medium leading-none">
+                        {formData.gender ? formData.gender.toUpperCase(): nullString}
+                      </p>
+                    </div>
+                    <div className="w-full flex flex-row justify-between items-end gap-2  sm:flex-col sm:gap-0 sm:space-y-1  sm:items-start ">
+                      <p className="text-2sm sm:text-sm text-muted-foreground">
+                        {"Height"}
+                      </p>
+                      <p className="text-sm sm:text-lg font-medium leading-none">
+                        {formData.height.feet && formData.height.inches ? formData.height.feet +
+                          "ft " +
+                          formData.height.inches +
+                          " in." : nullString}
+                      </p>
+                    </div>
+                    <div className="w-full flex flex-row justify-between items-end gap-2  sm:flex-col sm:gap-0 sm:space-y-1  sm:items-start ">
+                      <p className="text-2sm sm:text-sm text-muted-foreground">
+                        {"Date of Birth"}
+                      </p>
+                      <p className="text-sm sm:text-lg font-medium leading-none">
+                          {formData.dob ? moment(formData.dob).format("YYYY/MM/DD") +
+                          " ( Age : " +
+                          moment().diff(formData.dob, "years") +
+                          "y " +
+                          moment().diff(formData.dob, "months") +
+                          "m " +
+                          moment().diff(formData.dob, "days") +
+                          "d" +
+                          " )" : nullString}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full my-4">
+                    <div className="w-full flex flex-row justify-between items-end gap-2  sm:flex-col sm:gap-0 sm:space-y-1  sm:items-start ">
+                      <p className="text-2sm sm:text-sm text-muted-foreground">
+                        {"Religion"}
+                      </p>
+                      <p className="text-sm sm:text-lg font-medium leading-none">
+                        {formData.religion ? formData.religion.toUpperCase(): nullString}
+                      </p>
+                    </div>
+                    <div className="w-full flex flex-row justify-between items-end gap-2  sm:flex-col sm:gap-0 sm:space-y-1  sm:items-start ">
+                      <p className="text-2sm sm:text-sm text-muted-foreground">
+                        {"Caste"}
+                      </p>
+                      <p className="text-sm sm:text-lg font-medium leading-none">
+                        {formData.caste ? formData.caste.toUpperCase(): nullString}
+                      </p>
+                    </div>
+                    <div className="w-full flex flex-row justify-between items-end gap-2  sm:flex-col sm:gap-0 sm:space-y-1  sm:items-start ">
+                      <p className="text-2sm sm:text-sm text-muted-foreground">
+                        {"Marital Status"}
+                      </p>
+                      <p className="text-sm sm:text-lg font-medium leading-none">
+                        {formData.maritalStatus ? formData.maritalStatus.toUpperCase(): nullString}
+                      </p>
+                    </div>
+                  </div>
+                  <Separator />
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full my-4">
+                    <div className="w-full flex flex-row justify-between items-end gap-2  sm:flex-col sm:gap-0 sm:space-y-1  sm:items-start ">
+                      <p className="text-2sm sm:text-sm text-muted-foreground">
+                        {"Profession"}
+                      </p>
+                      <p className="text-sm sm:text-lg font-medium leading-none">
+                        {formData.profession ? formData.profession.toUpperCase(): nullString}
+                      </p>
+                    </div>
+                    <div className="w-full flex flex-row justify-between items-end gap-2  sm:flex-col sm:gap-0 sm:space-y-1  sm:items-start ">
+                      <p className="text-2sm sm:text-sm text-muted-foreground">
+                        {"Education"}
+                      </p>
+
+                      <p className="text-sm sm:text-lg font-medium leading-none">
+
+                        {formData.education ? formData.education.toUpperCase(): nullString}
+                        
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full my-4">
+                    <div className="w-full flex flex-row justify-between items-end gap-2  sm:flex-col sm:gap-0 sm:space-y-1  sm:items-start ">
+                      <p className="text-2sm sm:text-sm text-muted-foreground">
+                        {"Income"}
+                      </p>
+                      <p className="text-sm sm:text-lg font-medium leading-none">
+                        {formData.income ? formData.income.toUpperCase(): nullString}
+                      </p>
+                    </div>
+                  
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full my-4">
+                    <div className="w-full flex flex-row justify-between items-end gap-2  sm:flex-col sm:gap-0 sm:space-y-1  sm:items-start ">
+                      <p className="text-2sm sm:text-sm text-muted-foreground">
+                        {"Assets"}
+                      </p>
+                      <p className="text-sm sm:text-lg font-medium leading-none">
+                        {formData.assets.map((asset, index) => {
                           return (
-                            <SelectItem value={profession}>
-                              {profession}
-                            </SelectItem>
+                            <span key={`asset_${index}`} className="mx-1">
+                              {asset.toUpperCase() + ","}
+                            </span>
                           );
                         })}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="grid grid-cols-1 gap-2">
-                  <Label>Marital Status</Label>
-                  <Select
-                    onValueChange={handleMaritalStatusChange}
-                    defaultValue={formData.maritalStatus}
-                    disabled={!enableEdit}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select maritalStatus" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        {MARITAL_STATUS_ENUM.map((maritalStatus) => {
-                          return (
-                            <SelectItem value={maritalStatus}>
-                              {maritalStatus}
-                            </SelectItem>
-                          );
-                        })}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="grid grid-cols-1 gap-2">
-                  <Label>Income</Label>
-                  <Select
-                    onValueChange={handleIncomeChange}
-                    defaultValue={formData.income}
-                    disabled={!enableEdit}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select income range" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        {INCOME_ENUM.map((income) => {
-                          return (
-                            <SelectItem value={income}>{income}</SelectItem>
-                          );
-                        })}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              <Separator />
-              <div className="grid col-span-1 sm:col-span-3 m-2 gap-4">
-                <div className="grid grid-cols-1 gap-2  ">
-                  <Label className="text-sm font-medium">Assets</Label>
-                  <div className="border-2 rounded">
-                    <div className="flex flex-row flex-wrap justify-start m-1">
-                      {ASSETS_ENUM.map((asset) => {
-                        return (
-                          <div className="flex items-center mx-4">
-                            <Input
-                              id={asset}
-                              type="checkbox"
-                              className="w-4 h-4 rounded border-2 border-gray-300"
-                              onClick={handleAssetsChnage}
-                              value={asset}
-                              checked={formData.assets.includes(asset)}
-                              disabled={!enableEdit}
-                            />
-                            <Label className="mx-2 text-sm">{asset}</Label>
-                          </div>
-                        );
-                      })}
+                      </p>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-            <div className="flex flex-col sm:w-1/3 justify-start p-2">
-              <div className="w-full flex-grow">
-                <FormField
-                  name="bio"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>About</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          defaultValue={formData.bio}
-                          id="bio"
-                          onChange={handleChange}
-                          className="resize-y h-[30vh]"
-                          disabled={!enableEdit}
-                        />
-                      </FormControl>
-                      <FormDescription>{}</FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              {enableEdit && (
-                <div className="flex flex-col grow">
-                  <Label className="my-4">
-                    <b>Add Images : </b>
-                    <i className="text-sm text-muted-foreground">
-                      first one will be profile pic ..
-                    </i>{" "}
-                  </Label>
-                  <Input
-                    type="file"
-                    id="image"
-                    className="mx-2 p-2 mr:4 border-2 rounded-md w-full"
-                    accept="image/*"
-                    multiple
-                    onChange={handleImageUpload}
-                    disabled={!enableEdit}
-                  />
-                  <div className="flex flex-row flex-wrap">
-                    {imageFiles
-                      ? imageFiles.map((image, index) => {
-                          var url = URL.createObjectURL(image);
-                          return (
-                            <div
-                              className="flex flex-row"
-                              key={`profile_pic_${index}`}
-                            >
-                              <img
-                                src={url}
-                                alt={`profile_pic_${index}`}
-                                className="rounded-full h-14 w-14 object-cover cursor-pointer self-center m-2"
-                              />
-                            </div>
-                          );
-                        })
-                      : formData.profilePictures.map((picture, index) => {
-                          return (
-                            <div
-                              className="flex flex-row"
-                              key={`profile_pic_${index}`}
-                            >
-                              <img
-                                src={picture}
-                                alt={`profile_pic_${index}`}
-                                className="rounded-full h-14 w-14 object-cover cursor-pointer self-center m-2"
-                              />
-                            </div>
-                          );
-                        })}
+                </div>
+                <div className="flex flex-col sm:w-1/3 p-2">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full my-4">
+                    <div className="w-full flex flex-row justify-between items-end gap-2  sm:flex-col sm:gap-0 sm:space-y-1  sm:items-start ">
+                      <p className="text-sm text-muted-foreground">
+                        About
+                      </p>
+                      <p className="text-sm font-medium leading-none">
+                        {formData.bio}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              )}
-              {enableEdit && (
-                <div className="flex">
-                  <Button
-                    disabled={!enableEdit}
-                    className="font-bold py-2 px-4 rounded-full m-4 grow"
-                    onClick={handleSubmit}
-                  >
-                    {profileUploading ? "Uploading" : "Update Profile"}
-                  </Button>
-                </div>
-              )}
-            </div>
-          </form>
+              </form>
+            </>
+          ) : (
+            <div></div>
+          )}
           <span className="text-red-400 text-center block">
             {profileUploadError.toString()}
           </span>
