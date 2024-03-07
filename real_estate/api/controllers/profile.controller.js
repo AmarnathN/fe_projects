@@ -61,14 +61,16 @@ export const getProfiles = async (req, res, next) => {
         $all: JSON.parse(req.query.assets),
       };
     }
-    if (req.query.createdAt) {
+    if (req.query.createdAtGte) {
       match.createdAt = {
-        $gte: new Date(req.query.createdAt),
+        ...match.createdAt ,
+        $gte: new Date(req.query.createdAtGte),
       };
     }
-    if (req.query.createdAt) {
+    if (req.query.createdAtLte) {
       match.createdAt = {
-        $lte: new Date(req.query.createdAt),
+        ...match.createdAt ,
+        $lte: new Date(req.query.createdAtLte),
       };
     }
     if (req.query.profession) {

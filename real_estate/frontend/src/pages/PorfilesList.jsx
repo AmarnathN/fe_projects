@@ -23,6 +23,8 @@ import ProfileListCard from "../components/profile/ProfileListCard.jsx";
 import ProfileListFilters from "../components/profile/ProfileListFilters.jsx";
 import EditViewProfile from "./EditViewProfile.jsx";
 import { Input } from "../components/shadcn/components/ui/input.jsx";
+import { Card } from "../components/shadcn/components/ui/card.jsx";
+import { FaSadTear } from "react-icons/fa";
 
 export default function PorfilesList() {
   const [profiles, setProfiles] = useState([]);
@@ -40,6 +42,8 @@ export default function PorfilesList() {
     education: [],
     maritalStatus: [],
     income: [],
+    caste:[],
+    religion:[],
   });
   const navigate = useNavigate();
 
@@ -190,19 +194,31 @@ export default function PorfilesList() {
                         ))}
                       </div>
                     )}
-                    {currentRecords.map((profile) => (
+                    {currentRecords.length > 0 && currentRecords.map((profile) => (
                       <ProfileListCard profile={profile} />
                     ))}
+                    
                   </div>
                 </ScrollArea>
-                <section className="w-full flex felx-row justify-end">
-                  <MyPagination
-                    setCurrentPage={setCurrentPage}
-                    currentPage={currentPage}
-                    profiles={profiles}
-                    recordsPerPage={recordsPerPage}
-                  />
-                </section>
+                {currentRecords.length < 1 && !profilesLoading && (
+                      <Card className="w-full m-4 p-4">
+                        <span className="text-center text-3xl">
+                          No profiles found <FaSadTear className="text-center text-9xl text-primary inline" /> !!
+                        </span>
+
+                      </Card>
+                    )}
+                { profiles.length > 0 &&
+                   <section className="w-full flex felx-row justify-end">
+                   <MyPagination
+                     setCurrentPage={setCurrentPage}
+                     currentPage={currentPage}
+                     profiles={profiles}
+                     recordsPerPage={recordsPerPage}
+                   />
+                 </section>
+                }
+               
               </section>
             </div>
           </div>

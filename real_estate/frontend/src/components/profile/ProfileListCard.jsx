@@ -5,6 +5,8 @@ import { Card } from "../shadcn/components/ui/card";
 import { ScrollArea, ScrollBar } from "../shadcn/components/ui/scroll-area";
 import { Separator } from "../shadcn/components/ui/separator";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
+
 
 export default function ProfileListCard({ profile }) {
   const navigate = useNavigate();
@@ -34,13 +36,13 @@ export default function ProfileListCard({ profile }) {
               <p className="text-lg font-bold text-primary">
                 {profile.firstName + " " + profile.lastName}
               </p>
-              <p className="text-lg font-bold">
-                <FaEdit />
-              </p>
             </div>
             <div className="flex flex-row items-center flex-wrap justify-between w-full">
               <p className="text-sm font-medium leading-none">
-                {profile.age} years
+                {profile.dob
+                  ? " Age : " + moment().diff(profile.dob, "years") + "y "
+                  + moment().diff(profile.dob, "months")%12 + "m"
+                  : "N/A"}
               </p>
             </div>
             <Separator />
