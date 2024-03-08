@@ -22,7 +22,7 @@ export default function Stepper({
   const ActiveComponent = stepsConfig[activeStep].component;
 
   return (
-    <Card className="w-full">
+    <Card className="w-full border-0 p-4 shadow-inner">
       <div className="grid p-4 m-4 ">
         <div className="z-20 col-start-1 row-start-1 flex flex-row justify-between items-center">
           {stepsConfig.map((step, index) => {
@@ -35,8 +35,8 @@ export default function Stepper({
                 <div
                   className={`flex items-center justify-center w-8 h-8 rounded-full ${
                     activeStep >= index
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-secondary text-primary"
+                      ? "bg-primary dark:text-primary-foreground"
+                      : "bg-secondary dark:text-primary"
                   }`}
                 >
                   {index + 1}

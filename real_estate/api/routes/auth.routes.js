@@ -14,6 +14,8 @@ import {
   verifyToken,
 } from "../utils/verifyUser.utils.js";
 
+
+
 const authRouter = Router();
 
 authRouter.post("/signup", signUp);

@@ -28,12 +28,12 @@ export default function Header() {
   const { currentUser, isAuthenticated } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
+
   const handleSignOut = async (e) => {
     e.preventDefault();
     // sign out logic
     dispatch(signOutAtStart());
-    try{
+    try {
       const res = await fetch(`/api/auth/signout/${currentUser._id}`, {
         method: "GET",
         headers: {
@@ -48,7 +48,7 @@ export default function Header() {
       dispatch(signOutSuccess(null));
       navigate("/sign-in");
       return;
-    }catch(error){
+    } catch (error) {
       dispatch(signOutFailure(error));
       return;
     }
@@ -57,7 +57,10 @@ export default function Header() {
   return (
     <Card className="shadow-md opacity-85 rounded-none">
       <div className="flex justify-between items-center max-w-6xl mx-auto p-3">
-        <Badge variant="default" className={"bg-gradient-to-r z-10 from-primary"}>
+        <Badge
+          variant="default"
+          className={"bg-gradient-to-r z-10 from-primary"}
+        >
           <Link to="/">
             <h1 className="font-bold text-sm sm:text-xl flex flex-wrap">
               <p>Parinaye</p>
@@ -65,7 +68,7 @@ export default function Header() {
           </Link>
         </Badge>
         <ul className="flex items-center gap-4 z-10 opacity-85">
-          { currentUser && currentUser.username && isAuthenticated? (
+          {currentUser && currentUser.username && isAuthenticated ? (
             <>
               <Link to="/">
                 <li className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
@@ -92,25 +95,27 @@ export default function Header() {
                   </Avatar>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56">
-                  <DropdownMenuLabel>Appearance</DropdownMenuLabel>
+                  <DropdownMenuLabel>User Actions</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuGroup>
                     <DropdownMenuItem>
                       <Link to="/profile">My Account</Link>
-                      <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      Settings
-                      <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+                    <DropdownMenuItem onClick={handleSignOut}>
+                      Log out
                     </DropdownMenuItem>
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
-                  <DropdownMenuGroup>
-                    <DropdownMenuItem onClick={handleSignOut}>
-                      Log out
-                      <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-                    </DropdownMenuItem>
-                  </DropdownMenuGroup>
+                  {currentUser.role == "admin" && (
+                    <>
+                      <DropdownMenuLabel>Admin Actions</DropdownMenuLabel>
+                      <DropdownMenuGroup>
+                        <DropdownMenuItem>
+                          <Link to="/admin">Admin Dashboard</Link>
+                        </DropdownMenuItem>
+                      </DropdownMenuGroup>
+                    </>
+                  )}
                 </DropdownMenuContent>
               </DropdownMenu>
             </>

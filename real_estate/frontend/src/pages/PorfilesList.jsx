@@ -25,6 +25,7 @@ import EditViewProfile from "./EditViewProfile.jsx";
 import { Input } from "../components/shadcn/components/ui/input.jsx";
 import { Card } from "../components/shadcn/components/ui/card.jsx";
 import { FaSadTear } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 export default function PorfilesList() {
   const [profiles, setProfiles] = useState([]);
@@ -35,6 +36,7 @@ export default function PorfilesList() {
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
   const currentRecords = profiles.slice(indexOfFirstRecord, indexOfLastRecord);
+  const {currentUser} =useSelector((state) => state.user);
 
   const [filters, setFilters] = useState({
     profession: [],
@@ -149,10 +151,11 @@ export default function PorfilesList() {
               <Input
                 type="search"
                 placeholder={`Search profiles by name, email, phone number ...`}
-                className="rounded-md max-w-sm border-primary mx-2"
+                className="rounded-md max-w-sm border-primary mx-2 bg-background dark:bg-zinc-800 dark:text-white"
                 onChange={handleSearch}
                 
               />
+              {currentUser.role == "admin" && (
               <Dialog>
                 <DialogTrigger asChild>
                   <Button variant="default">Create Profile</Button>
@@ -171,6 +174,7 @@ export default function PorfilesList() {
                   </ScrollArea>
                 </DialogContent>
               </Dialog>
+              )}
             </div>
             <Separator />
 

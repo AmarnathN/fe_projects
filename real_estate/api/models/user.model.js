@@ -30,6 +30,11 @@ const userSchema = new mongoose.Schema(
           "Password must contain at least 8 characters, including UPPER/lowercase and numbers"
         ]
     },
+    role: {
+      type: String,
+      default: "user",
+      enum: ["user", "admin"],
+    },
     avatar:{
       type: String,
       default: "https://i0.wp.com/www.cssscript.com/wp-content/uploads/2020/12/Customizable-SVG-Avatar-Generator-In-JavaScript-Avataaars.js.png?fit=438%2C408&ssl=1"

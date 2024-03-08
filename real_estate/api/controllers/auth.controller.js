@@ -13,7 +13,8 @@ dotenv.config();
 export const signUp = async (req, res, next) => {
   console.log(req.body);
   const { username, email, password } = req.body;
-  const hashedPassword = bcryptjs.hashSync(password, process.env.BYCRYPT_SALT);
+  const hashedPassword = bcryptjs.hashSync(password, parseInt(process.env.BYCRYPT_SALT));
+
 
   try {
     const newUser = new User({ username, email, password: hashedPassword });

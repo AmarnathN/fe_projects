@@ -38,3 +38,18 @@ export const deleteUser = async (req, res, next) => {
         next(errorHandler(500, "Failed to delete user"));
     }
 }
+
+export const getUsers = async (req, res, next) => {
+    try{
+        console.log(req.user);
+        const currentUser = await User.findById(req.user.id);
+        if(currentUser && currentUser.role !== "admin"){
+            return next(errorHandler(401, "Unauthorized! you can only get all users if you are an admin"));
+        }
+        const users = await User.find().select("-password");
+        res.status(200).json(users);
+    }catch(err){
+        console.log(err);
+        next(errorHandler(500, "Failed to get users"));
+    }
+}

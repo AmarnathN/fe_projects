@@ -56,6 +56,7 @@ import {
 import { Textarea } from "../shadcn/components/ui/textarea";
 import Stepper from "../../pages/Stepper";
 import { isValidImageURL } from "../../utils/helpers.jsx";
+import { Calendar } from "../shadcn/components/ui/calendar";
 
 const formSchema = z.object({
   firstName: z.string().min(1),
@@ -489,6 +490,8 @@ export default function CreateEditProfile({
                         onChange={handleChange}
                         className="w-full bg-secondary rounded-md p-1"
                       />
+                  
+
                     </FormControl>
                   </FormItem>
                 )}
