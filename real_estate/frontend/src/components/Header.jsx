@@ -23,6 +23,7 @@ import {
   signOutSuccess,
   signOutFailure,
 } from "../redux/user/userSlice.js";
+import { ModeToggle } from "./shadcn/mode-toggle";
 
 export default function Header() {
   const { currentUser, isAuthenticated } = useSelector((state) => state.user);
@@ -126,6 +127,7 @@ export default function Header() {
               </li>
             </Link>
           )}
+          <ModeToggle />
         </ul>
       </div>
     </Card>
