@@ -10,7 +10,6 @@ import {
   DropdownMenuTrigger,
 } from "./components/ui/dropdown-menu";
 import { useTheme } from "./theme-provider";
-import { Link } from "react-router-dom";
 
 export function ModeToggle() {
   const { setTheme } = useTheme();
@@ -24,7 +23,6 @@ export function ModeToggle() {
             <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
             <span className="sr-only">Toggle theme</span>
           </Button>
-          {/* <Button /> */}
         </DropdownMenuTrigger>
         <DropdownMenuContent  className="w-56">
         <DropdownMenuGroup>

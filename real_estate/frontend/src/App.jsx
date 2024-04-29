@@ -14,6 +14,8 @@ import { CookiesProvider } from 'react-cookie';
 import ForgotPassword from "./pages/ForgotPassword";
 import EditViewProfile from "./pages/EditViewProfile";
 import Stepper from "./pages/Stepper";
+import ContactUs from "./pages/ContactUs";
+import AdminDashBoard from "./pages/AdminDashBoard";
 
 export default function App() {
   return (
@@ -36,7 +38,7 @@ export default function App() {
           <Routes>
             <Route path="/sign-in" element={<Signin />} />
             <Route path="/sign-up" element={<SignUp />} />
-
+            <Route path="/contactUs" element={<ContactUs />} />
             <Route path="/stepper" element={<Stepper />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route element={<PrivateRoute />}>
@@ -45,9 +47,12 @@ export default function App() {
               <Route path="/" element={<Home />} />
               <Route path="/home" element={<Home />} />
               <Route path="/profile" element={<UserProfile />} />
+              <Route path="/adminDashboard" element={<AdminDashBoard />} />
               <Route path="/profile/:id" element={<EditViewProfile />} />
               <Route path="/createProfile" element={<CreateProfile />} />
-              <Route path="/viewProfiles" element={<PorfilesList />}></Route>
+              <Route path="/viewProfiles" element={<PorfilesList />}/>
+              
+
             </Route>
           </Routes>
           <MyFooter></MyFooter>

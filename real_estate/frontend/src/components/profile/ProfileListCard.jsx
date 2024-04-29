@@ -7,7 +7,6 @@ import { Separator } from "../shadcn/components/ui/separator";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 
-
 export default function ProfileListCard({ profile }) {
   const navigate = useNavigate();
   console.log(profile);
@@ -33,17 +32,31 @@ export default function ProfileListCard({ profile }) {
           {/* </Card> */}
           <div className="flex flex-col items-center justify-between p-2 m-2 w-2/3 gap-2">
             <div className="flex flex-row flex-wrap items-center justify-between w-full">
-              <p className="text-lg font-bold text-primary">
+              <p className="text-lg font-bold dark:text-primary">
                 {profile.firstName + " " + profile.lastName}
               </p>
             </div>
             <div className="flex flex-row items-center flex-wrap justify-between w-full">
+
+            <div className="flex flex-row items-center gap-1 ">
+              <p className="text-2sm text-muted-foreground">{"Age"}</p>
               <p className="text-sm font-medium leading-none">
                 {profile.dob
-                  ? " Age : " + moment().diff(profile.dob, "years") + "y "
-                  + moment().diff(profile.dob, "months")%12 + "m"
+                  ? " Age : " +
+                    moment().diff(profile.dob, "years") +
+                    "y " +
+                    (moment().diff(profile.dob, "months") % 12) +
+                    "m"
                   : "N/A"}
               </p>
+            </div>
+              <div className="flex flex-row items-center gap-1 ">
+              <p className="text-2sm text-muted-foreground">{"Religion"}</p>
+                <p className="text-sm font-medium leading-none">
+                  
+                  {profile.religion ? profile.religion : "N/A"}
+                </p>
+              </div>
             </div>
             <Separator />
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full gap-2">

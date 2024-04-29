@@ -112,7 +112,7 @@ export default function Header() {
                       <DropdownMenuLabel>Admin Actions</DropdownMenuLabel>
                       <DropdownMenuGroup>
                         <DropdownMenuItem>
-                          <Link to="/admin">Admin Dashboard</Link>
+                          <Link to="/adminDashBoard">Admin Dashboard</Link>
                         </DropdownMenuItem>
                       </DropdownMenuGroup>
                     </>
